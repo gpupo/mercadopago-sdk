@@ -80,6 +80,17 @@ Adicione o pacote ``mercadopago-sdk`` ao seu projeto utilizando [composer](http:
 
 ---
 
+## Development (with docker)
+
+    docker run -d --name mercadopago-sdk-pod -v "$PWD":/var/www/app gpupo/container-orchestration:php-dev-v1.4.2
+
+    docker exec -it  mercadopago-sdk-pod  /bin/bash
+
+    vendor/bin/phpunit;
+
+    docker stop mercadopago-sdk-pod;
+
+
 ## Links
 
 * [Mercadopago-sdk Composer Package](https://packagist.org/packages/gpupo/mercadopago-sdk) no packagist.org
