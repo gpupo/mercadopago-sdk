@@ -70,7 +70,6 @@ Proibido:
  _- [Gilmar Pupo](https://opensource.gpupo.com/)_
 
 
-
 ---
 
 ## Instalação
@@ -85,3 +84,4 @@ Adicione o pacote ``mercadopago-sdk`` ao seu projeto utilizando [composer](http:
 
 * [Mercadopago-sdk Composer Package](https://packagist.org/packages/gpupo/mercadopago-sdk) no packagist.org
 * [Github Repository](https://github.com/gpupo/mercadopago-sdk/);
+* [Documentação oficial](https://www.mercadopago.com.br/developers/pt/plugins_sdks/sdks/official/php/);
