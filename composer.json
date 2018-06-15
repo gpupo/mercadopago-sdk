@@ -32,7 +32,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Gpupo\\Tests\\MercadopagoSdk\\": "tests"
+            "Gpupo\\MercadopagoSdk\\Tests\\": "tests"
         }
     },
     "bin": ["bin/mercadopago-sdk"],
