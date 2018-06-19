@@ -30,16 +30,33 @@ final class Client extends ClientAbstract implements ClientInterface
         $domain = 'api.mercadopago.com';
 
         return [
-            'app_id' => false,
-            'secret_key' => false,
+            'client_id' => false,
+            'client_secret' => false,
             'access_token' => false,
+            'user_id' => false,
             'refresh_token' => false,
             'users_url' => sprintf('https://%s/users', $domain),
-            'base_url' => sprintf('https://%s/v1', $domain),
+            'base_url' => sprintf('https://%s', $domain),
+            'oauth_url' => sprintf('https://%s/oauth', $domain),
             'verbose' => true,
             'cacheTTL' => 3600,
-            'user_id' => 12345678,
+            'offset' => 0,
+            'limit' => 0,
         ];
+    }
+
+    public function requestToken()
+    {
+        $pars = [
+          'grant_type' => 'client_credentials',
+          'client_id' => $this->getOptions()->get('client_id'),
+          'client_secret' => $this->getOptions()->get('client_secret'),
+        ];
+
+        $this->setMode('form');
+        $request = $this->post($this->getOauthUrl('/token'), $pars);
+
+        return $request->getData();
     }
 
     protected function renderAuthorization()
@@ -47,5 +64,10 @@ final class Client extends ClientAbstract implements ClientInterface
         $list = [];
 
         return $list;
+    }
+
+    protected function getOauthUrl($path)
+    {
+        return $this->getOptions()->get('oauth_url').$path;
     }
 }

@@ -43,7 +43,7 @@ class ClientTest extends TestCaseAbstract
     public function testGerenciaUriDeRecurso(ClientInterface $client)
     {
         $this->assertSame(
-            'https://api.mercadopago.com/v1/foo',
+            'https://api.mercadopago.com/foo',
             $client->getResourceUri('/foo')
         );
     }

@@ -15,26 +15,22 @@ declare(strict_types=1);
  *
  */
 
-namespace Gpupo\MercadopagoSdk\Console\Command\Trading\Payment;
+namespace Gpupo\MercadopagoSdk\Console\Command\Auth;
 
-use Gpupo\Common\Traits\TableTrait;
 use Gpupo\MercadopagoSdk\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListCommand extends AbstractCommand
+final class TokenCommand extends AbstractCommand
 {
-    use TableTrait;
-
-    private $limit = 50;
-
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName(self::prefix.'trading:payment:list')->setDescription('Get the Payment list on MercadoPago');
-        $this->addOptionsForList();
+        $this
+            ->setName(self::prefix.'auth:token')
+            ->setDescription('Get MercadoPago token');
     }
 
     /**
@@ -42,21 +38,12 @@ class ListCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $paymentManager = $this->getFactory()->factoryManager('payment');
-        $offset = $input->getOption('offset');
-        $max = $input->getOption('max');
-        $output->writeln(sprintf('Max items from this fetch is <fg=blue> %d </>', $max));
-        $items = [];
+        $client = $this->getFactory()->getClient();
 
         try {
-            $output->writeln(sprintf('Fetching from %d to %d', $offset, ($offset + $this->limit)));
-            $response = $paymentManager->rawFetch($offset, $this->limit);
+            $data = $client->requestToken();
 
-            $paging = $response->get('paging');
-            $total = $paging['total'];
-            $output->writeln(sprintf('Total: <bg=green;fg=black> %d </>', $total));
-
-            $this->displayTableResults($output, $response->get('results'));
+            return $this->saveCredentials($data->toArray(), $output);
         } catch (\Exception $exception) {
             $output->writeln(sprintf('Error: <bg=red>%s</>', $exception->getmessage()));
         }

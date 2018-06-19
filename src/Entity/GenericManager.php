@@ -19,7 +19,7 @@ namespace Gpupo\MercadopagoSdk\Entity;
 
 use Gpupo\CommonSdk\Map;
 
-final class GenericManager extends AbstractManager
+class GenericManager extends AbstractManager
 {
     public function factorySimpleMap(array $route, array $parameters = null)
     {

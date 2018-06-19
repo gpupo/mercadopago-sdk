@@ -1,0 +1,90 @@
+---
+id: 5046323112
+date_created: '2016-12-09T09:47:39.000-04:00'
+date_approved: '2016-12-12T06:46:29.000-04:00'
+date_last_updated: '2016-12-12T06:46:29.000-04:00'
+date_of_expiration:
+money_release_date: '2017-01-02T06:46:29.000-04:00'
+operation_type: regular_payment
+issuer_id:
+payment_method_id: bolbradesco
+payment_type_id: ticket
+status: approved
+status_detail: accredited
+currency_id: BRL
+description: Kit Acme de atordoamento de Road Runners
+live_mode: true
+sponsor_id:
+authorization_code:
+money_release_schema:
+counter_currency:
+collector_id: 254289619
+payer:
+  type: registered
+  id: '179119340'
+  identification:
+    type: CPF
+    number: 59817473074
+  email:
+  phone:
+    area_code: " "
+    number: '4199476784'
+    extension:
+  first_name: Wile
+  last_name: E. Coyote
+  entity_type:
+metadata: {}
+additional_info:
+  items:
+  - id: MLB391639152
+    title: Kit Acme de atordoamento de Road Runners
+    description:
+    picture_url:
+    category_id: MLB114434
+    quantity: '1'
+    unit_price: '243.9'
+order:
+  type: mercadolibre
+  id: '6485856515'
+external_reference: '6485856515'
+transaction_amount: 243.9
+transaction_amount_refunded: 0
+coupon_amount: 0
+differential_pricing_id:
+deduction_schema:
+barcode:
+  type:
+  width:
+  height:
+  content: '37271700633330237927371000002439033802507443'
+transaction_details:
+  net_received_amount: 204.88
+  total_paid_amount: 243.9
+  overpaid_amount: 0
+  external_resource_url: https://www.mercadopago.com/mlb/payments/ticket/helper?payment_id=5046323112&payment_method_reference_id=2717744337&caller_id=179119340
+  installment_amount: 243.9
+  financial_institution:
+  payment_method_reference_id: '2717744337'
+  payable_deferral_period:
+  acquirer_reference:
+  verification_code: '2717744337'
+fee_details:
+- type: ml_fee
+  amount: 22.46
+  fee_payer: collector
+- type: mp_fee
+  amount: 16.56
+  fee_payer: collector
+captured: true
+binary_mode: false
+call_for_authorize_id:
+statement_descriptor:
+installments: 1
+card: {}
+notification_url:
+refunds: []
+processing_mode: aggregator
+merchant_account_id:
+acquirer:
+merchant_number:
+acquirer_reconciliation: []

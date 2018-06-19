@@ -41,6 +41,9 @@ class Factory extends FactoryAbstract
             'generic' => [
                 'manager' => sprintf('%sGenericManager', $namespace),
             ],
+            'movement' => [
+                'manager' => sprintf('%sMovementManager', $namespace),
+            ],
         ];
     }
 }

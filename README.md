@@ -82,13 +82,14 @@ Adicione o pacote ``mercadopago-sdk`` ao seu projeto utilizando [composer](http:
 
 ## Development (with docker)
 
-phpunit:
+### Load Aliases
 
-    docker-compose  php-dev vendor/bin/phpunit
+    source vendor/gpupo/common/bin/alias.sh
 
-php-cs-fixer:
+### Tools loaded
 
-    docker-compose run php-dev /root/.composer/vendor/bin/php-cs-fixer fix   
+- phpunit
+- php-cs-fixer
 
 
 ## Links
@@ -96,3 +97,4 @@ php-cs-fixer:
 * [Mercadopago-sdk Composer Package](https://packagist.org/packages/gpupo/mercadopago-sdk) no packagist.org
 * [Github Repository](https://github.com/gpupo/mercadopago-sdk/);
 * [Documentação oficial](https://www.mercadopago.com.br/developers/pt/plugins_sdks/sdks/official/php/);
+* [Exemplos oficiais](https://github.com/mercadopago/code-examples);
