@@ -21,9 +21,9 @@ class BankingManager extends GenericManager
 {
     public function requestReport()
     {
-        return $this->getFromRoute(['POST', '/v1/account/bank_report?access_token={access_token}'], null,  [
-            "begin_date" => "2017-05-01T03:00:00Z",
-            "end_date" => "2017-07-11T02:59:59Z"
+        return $this->getFromRoute(['POST', '/v1/account/bank_report?access_token={access_token}'], null, [
+            'begin_date' => '2017-05-01T03:00:00Z',
+            'end_date' => '2017-07-11T02:59:59Z',
         ]);
     }
 
@@ -48,7 +48,7 @@ class BankingManager extends GenericManager
 
         foreach ($lines as $value) {
             $line = [];
-            foreach(str_getcsv($value) as $k => $v) {
+            foreach (str_getcsv($value) as $k => $v) {
                 $line[$keys[$k]] = $v;
             }
 
@@ -59,5 +59,4 @@ class BankingManager extends GenericManager
 
         return $list;
     }
-
 }
