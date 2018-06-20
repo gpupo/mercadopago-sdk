@@ -19,6 +19,7 @@ namespace Gpupo\MercadopagoSdk\Tests;
 
 use Gpupo\MercadopagoSdk\Client\Client;
 use Gpupo\MercadopagoSdk\Factory;
+use Gpupo\MercadopagoSdk\Entity\MovementManager;
 use Gpupo\Tests\CommonSdk\FactoryTestAbstract;
 
 /**
@@ -33,6 +34,12 @@ class FactoryTest extends FactoryTestAbstract
         return Factory::getInstance();
     }
 
+    public function testSimpleInstance()
+    {
+        $factory = new \Gpupo\MercadopagoSdk\Factory();
+        $manager = $factory->factoryManager('movement');
+        $this->assertInstanceOf(MovementManager::class, $manager);
+    }
     /**
      * Dá acesso a ``Factory``.
      */
