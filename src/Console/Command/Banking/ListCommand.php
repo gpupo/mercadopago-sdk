@@ -15,27 +15,29 @@ declare(strict_types=1);
  *
  */
 
-namespace Gpupo\MercadopagoSdk\Console\Command\Schema;
+namespace Gpupo\MercadopagoSdk\Console\Command\Banking;
 
 use Gpupo\MercadopagoSdk\Console\Command\AbstractCommand;
-use Gpupo\MercadopagoSdk\Entity\Payment\Payment;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Gpupo\Common\Traits\TableTrait;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * @codeCoverageIgnore
+ * @see https://www.mercadopago.com.br/developers/pt/api-docs/account/conciliation-tools/
  */
-final class PaymentCommand extends AbstractCommand
+class ListCommand extends AbstractCommand
 {
+    use TableTrait;
+
+    private $limit = 50;
+
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this
-            ->setName(self::prefix.'schema:payment')
-            ->setDescription('Dump Payment Schema');
+        $this->setName(self::prefix.'banking:report:list')->setDescription('Get the Report List.');
     }
 
     /**
@@ -43,11 +45,14 @@ final class PaymentCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $payment = new Payment();
-        $schema = $this->getSchema($payment);
-        $this->writeInfo($output, $schema);
-        $content = Yaml::dump($schema, 8);
+        $manager = $this->getFactory()->factoryManager('banking');
 
-        file_put_contents('Resources/schema/payment.yaml', $content);
+        try {
+            $response = $manager->getReportList();
+            $this->displayTableResults($output, $response, [], 40);
+            //file_put_contents('var/cache/bank-report-list.yaml', Yaml::dump($response->toArray(), 4, 4));
+        } catch (\Exception $exception) {
+            $output->writeln(sprintf('Error: <bg=red>%s</>', $exception->getmessage()));
+        }
     }
 }

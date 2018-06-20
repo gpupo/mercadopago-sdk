@@ -29,10 +29,10 @@ class GenericManager extends AbstractManager
         return $map;
     }
 
-    public function getFromRoute(array $route, array $parameters = null)
+    public function getFromRoute(array $route, array $parameters = null, $body = null)
     {
         $map = $this->factorySimpleMap($route, $parameters);
-        $perform = $this->perform($map);
+        $perform = $this->perform($map, $body);
 
         return $perform->getData();
     }
