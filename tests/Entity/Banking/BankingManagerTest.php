@@ -15,14 +15,16 @@ declare(strict_types=1);
  *
  */
 
-namespace  Gpupo\MercadopagoSdk\Tests\Entity;
+namespace  Gpupo\MercadopagoSdk\Tests\Entity\Banking;
 
 use Gpupo\Common\Entity\Collection;
+use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Record;
+use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Report;
 use Gpupo\MercadopagoSdk\Tests\TestCaseAbstract;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * @coversDefaultClass \Gpupo\MercadopagoSdk\Entity\BankingManager
+ * @coversDefaultClass \Gpupo\MercadopagoSdk\Entity\Banking\BankingManager
  */
 class BankingManagerTest extends TestCaseAbstract
 {
@@ -39,7 +41,32 @@ class BankingManagerTest extends TestCaseAbstract
         $fileSystem = new Filesystem();
         $fileSystem->copy(static::getResourcesPath().'/mockup/Banking/bank-report-123.csv', static::getVarPath().'/cache/bank-report-123.csv');
         $report = $manager->findReportById('bank-report-123.csv');
-        $this->assertInternalType('array', $report);
+        $this->assertInstanceOf(Report::class, $report);
+        $this->assertInstanceOf(Record::class, $report->getRecords()->first());
+    }
+
+    public function testPersist()
+    {
+        $manager = $this->getFactory()->factoryManager('banking');
+        $report = $manager->findReportById('bank-report-123.csv');
+        $this->assertInstanceOf(Report::class, $report);
+        $entityManager = $this->getDoctrineEntityManager();
+        $repository = $entityManager->getRepository(Report::class);
+
+        if ($row = $repository->findOneBy(['file_name' => 'bank-report-123.csv'])) {
+            $entityManager->remove($row);
+            $entityManager->flush();
+        }
+
+        $entityManager->persist($report);
+        $entityManager->flush();
+
+
+        $row = $repository->findOneBy(['file_name' => 'bank-report-123.csv']);
+        $this->assertInstanceOf(Report::class, $row);
+        $this->assertSame('bank-report-123.csv', $row->getFileName());
+        $this->assertInstanceOf(Record::class, $row->getRecords()->first());
+
     }
 
     protected function mockupManager($file = null)

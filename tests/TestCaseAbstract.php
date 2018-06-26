@@ -24,11 +24,6 @@ abstract class TestCaseAbstract extends CommonSdkTestCaseAbstract
 {
     private $factory;
 
-    protected function getDoctrineEntityManager()
-    {
-        return Bootstrap::factoryDoctrineEntityManager();
-    }
-    
     public static function getResourcesPath()
     {
         return dirname(__DIR__).'/Resources/';
@@ -42,6 +37,11 @@ abstract class TestCaseAbstract extends CommonSdkTestCaseAbstract
     public function factoryClient()
     {
         return $this->getFactory()->getClient();
+    }
+
+    protected function getDoctrineEntityManager()
+    {
+        return Bootstrap::factoryDoctrineEntityManager();
     }
 
     protected function getOptions()

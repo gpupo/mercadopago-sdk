@@ -18,9 +18,7 @@ declare(strict_types=1);
 namespace  Gpupo\MercadopagoSdk\Tests\Entity;
 
 use Gpupo\Common\Entity\Collection;
-use  Gpupo\CommonSchema\ORM\Entity\Trading\Payment\PaymentORM;
 use  Gpupo\CommonSchema\ArrayCollection\Trading\Payment\Payment;
-
 use Gpupo\MercadopagoSdk\Tests\TestCaseAbstract;
 use Symfony\Component\Yaml\Yaml;
 

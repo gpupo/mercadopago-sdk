@@ -17,10 +17,10 @@ declare(strict_types=1);
 
 namespace Gpupo\MercadopagoSdk\Entity;
 
+use Gpupo\CommonSchema\Converters\ConverterContainerTrait;
 use Gpupo\CommonSdk\Entity\EntityInterface;
 use Gpupo\CommonSdk\Entity\ManagerAbstract;
-use Gpupo\CommonSdk\Entity\ManagerInterface;
-use  Gpupo\CommonSchema\Converters\ConverterContainerTrait;
+use  Gpupo\CommonSdk\Entity\ManagerInterface;
 
 abstract class AbstractManager extends ManagerAbstract implements ManagerInterface
 {

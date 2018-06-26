@@ -15,7 +15,10 @@ declare(strict_types=1);
  *
  */
 
-namespace Gpupo\MercadopagoSdk\Entity;
+namespace Gpupo\MercadopagoSdk\Entity\Banking;
+
+use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
+use Gpupo\MercadopagoSdk\Entity\GenericManager;
 
 class BankingManager extends GenericManager
 {
@@ -43,25 +46,36 @@ class BankingManager extends GenericManager
 
         $lines = file($destination, FILE_IGNORE_NEW_LINES);
 
-        if(empty($lines)) {
-            throw new \Exception("Empty Report");
+        if (empty($lines)) {
+            throw new \Exception('Empty Report');
         }
 
-        $header = array_shift($lines);
-        $keys = str_getcsv($header);
-        $list = [];
+        $keys = $this->resolveKeysFromHeader(array_shift($lines));
+
+        $report = new Report([
+            'file_name' => $filename,
+            'institution' => 'mercadopago',
+        ]);
 
         foreach ($lines as $value) {
-            $line = [];
+            $line = [
+            ];
             foreach (str_getcsv($value) as $k => $v) {
                 $line[$keys[$k]] = $v;
             }
 
-            if (!empty($line['DATE'])) {
-                $list[] = $line;
+            if (!empty($line['date'])) {
+                $report->getRecords()->factoryElementAndAdd($line);
             }
         }
 
-        return $list;
+        return $this->setConversionType('ORM')->decorateByConversionType($report);
+    }
+
+    protected function resolveKeysFromHeader($array)
+    {
+        return array_map(function ($v) {
+            return ltrim(strtolower($v), 'mp_');
+        }, str_getcsv($array));
     }
 }

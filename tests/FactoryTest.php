@@ -18,11 +18,12 @@ declare(strict_types=1);
 namespace Gpupo\MercadopagoSdk\Tests;
 
 use Gpupo\MercadopagoSdk\Client\Client;
-use Gpupo\MercadopagoSdk\Factory;
 use Gpupo\MercadopagoSdk\Entity\GenericManager;
 use Gpupo\MercadopagoSdk\Entity\MovementManager;
-use Gpupo\Tests\CommonSdk\FactoryTestAbstract;
 use Gpupo\MercadopagoSdk\Entity\PaymentTranslator;
+use Gpupo\MercadopagoSdk\Factory;
+use Gpupo\Tests\CommonSdk\FactoryTestAbstract;
+
 /**
  * @coversNothing
  */
@@ -41,6 +42,7 @@ class FactoryTest extends FactoryTestAbstract
         $manager = $factory->factoryManager('movement');
         $this->assertInstanceOf(MovementManager::class, $manager);
     }
+
     /**
      * Dá acesso a ``Factory``.
      */

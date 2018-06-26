@@ -45,7 +45,7 @@ class Factory extends FactoryAbstract
                 'manager' => sprintf('%sMovementManager', $namespace),
             ],
             'banking' => [
-                'manager' => sprintf('%sBankingManager', $namespace),
+                'manager' => sprintf('%sBanking\BankingManager', $namespace),
             ],
             'paymentTranslator' => [
                 'class' => sprintf('%sPaymentTranslator', $namespace),
