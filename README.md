@@ -3,7 +3,7 @@
 SDK Não Oficial para integração a partir de aplicações PHP com as APIs Mercadopago
 
 
-[![Paypal Donations](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EK6F2WRKG7GNN&item_name=mercadopago-sdk)
+[![Paypal Donations](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WAQKVZJRG5AUJ&item_name=mercadopago-sdk)
 
 
 ## Requisitos para uso
@@ -56,8 +56,6 @@ Proibido:
 
 [![Build Status](https://secure.travis-ci.org/gpupo/mercadopago-sdk.png?branch=master)](http://travis-ci.org/gpupo/mercadopago-sdk)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gpupo/mercadopago-sdk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/gpupo/mercadopago-sdk/?branch=master)
-[![Code Climate](https://codeclimate.com/github/gpupo/mercadopago-sdk/badges/gpa.svg)](https://codeclimate.com/github/gpupo/mercadopago-sdk)
-[![Test Coverage](https://codeclimate.com/github/gpupo/mercadopago-sdk/badges/coverage.svg)](https://codeclimate.com/github/gpupo/mercadopago-sdk/coverage)
 
 ---
 
@@ -70,7 +68,6 @@ Proibido:
  _- [Gilmar Pupo](https://opensource.gpupo.com/)_
 
 
-
 ---
 
 ## Instalação
@@ -81,7 +78,38 @@ Adicione o pacote ``mercadopago-sdk`` ao seu projeto utilizando [composer](http:
 
 ---
 
+## Desenvolvimento
+
+Preparando o banco de dados
+
+    docker-compose up -d  mariadb;
+    vendor/bin/doctrine orm:schema-tool:update --force
+
+Rodando os testes
+
+    vendor/bin/phpunit;
+
+
+Rebuild database
+
+    vendor/bin/doctrine orm:schema-tool:drop --force
+    vendor/bin/doctrine orm:schema-tool:create
+
+
+### Load Aliases
+
+    source vendor/gpupo/common/bin/alias.sh
+
+### Tools loaded
+
+- phpunit
+- php-cs-fixer
+
+
 ## Links
 
 * [Mercadopago-sdk Composer Package](https://packagist.org/packages/gpupo/mercadopago-sdk) no packagist.org
-* [Github Repository](https://github.com/gpupo/mercadopago-sdk/);
+* [Github Repository](https://github.com/gpupo/mercadopago-sdk/)
+* [Documentação oficial](https://www.mercadopago.com.br/developers/pt/plugins_sdks/sdks/official/php/)
+* [Exemplos oficiais](https://github.com/mercadopago/code-examples)
+* [Referência API](https://www.mercadopago.com.br/developers/pt/reference)

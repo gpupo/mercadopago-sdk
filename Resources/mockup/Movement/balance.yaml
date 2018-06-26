@@ -1,0 +1,29 @@
+user_id: 357789619
+total_amount: 12338.45
+available_balance: 4350.87
+unavailable_balance: 7987.58
+unavailable_balance_by_reason:
+- reason: reserve_for_payment
+  amount: 0
+- reason: shipping_return
+  amount: -55.45
+- reason: dispute
+  amount: 94.84
+- reason: fraud
+  amount: 0
+- reason: ml_debt
+  amount: 0
+- reason: time_period
+  amount: 7892.74
+- reason: restriction
+  amount: 0
+currency_id: BRL
+available_balance_by_transaction_type:
+- amount: 4350.87
+  transaction_type: transfer
+- amount: 4350.87
+  transaction_type: withdrawal
+- amount: 4350.87
+  transaction_type: payment
+- amount: 12338.45
+  transaction_type: label_purchase

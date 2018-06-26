@@ -1,0 +1,195 @@
+paging:
+    total: 2573
+    limit: 0
+    offset: 0
+results:
+    -
+        id: 213731559420
+        user_id: 254289619
+        type: income
+        detail: payment
+        amount: 243.9
+        currency_id: BRL
+          reference_id: 7231125046
+        site_id: MLB
+        client_id: 0
+        financial_entity: other
+        status: available
+        label:
+            - bacen_available
+        date_created: '2016-12-12T06:46:29.000-04:00'
+        date_released: '2016-12-24T14:55:00.000-04:00'
+        balanced_amount: 218818.63
+        original_move_id: null
+        date_in_millis: 21513075589766
+    -
+        id: 212914859670
+        user_id: 254289619
+        type: income
+        detail: payment
+        amount: 2129.7
+        currency_id: BRL
+        reference_id: 2919565251
+        site_id: MLB
+        client_id: 0
+        financial_entity: credit_card
+        status: available
+        label:
+            - bacen_available
+        date_created: '2016-08-14T18:55:25.000-04:00'
+        date_released: '2016-08-18T14:34:02.000-04:00'
+        balanced_amount: 74456.43
+        original_move_id: null
+        date_in_millis: 21502751325545
+    -
+        id: 212897466270
+        user_id: 254289619
+        type: income
+        detail: payment
+        amount: 252.9
+        currency_id: BRL
+        reference_id: 2915464037
+        site_id: MLB
+        client_id: 0
+        financial_entity: credit_card
+        status: available
+        label:
+            - bacen_available
+        date_created: '2016-08-12T11:09:42.000-04:00'
+        date_released: '2016-08-24T12:02:24.000-04:00'
+        balanced_amount: 73296.71
+        original_move_id: null
+        date_in_millis: 21502550582893
+    -
+        id: 212694927160
+        user_id: 254289619
+        type: income
+        detail: payment
+        amount: 2178.9
+        currency_id: BRL
+        reference_id: 2868809965
+        site_id: MLB
+        client_id: 0
+        financial_entity: credit_card
+        status: available
+        label:
+            - bacen_available
+        date_created: '2016-07-21T17:39:35.000-04:00'
+        date_released: '2016-08-04T10:07:29.000-04:00'
+        balanced_amount: 219798.42
+        original_move_id: null
+        date_in_millis: 21500673175459
+    -
+        id: 8411703031
+        user_id: 254289619
+        type: income
+        detail: payment
+        amount: 2125
+        currency_id: BRL
+        reference_id: 7194201614
+        site_id: MLB
+        client_id: 0
+        financial_entity: other
+        status: available
+        label:
+            - bacen_available
+        date_created: '2016-11-28T17:46:11.000-04:00'
+        date_released: '2016-12-17T15:00:11.000-04:00'
+        balanced_amount: 78891.71
+        original_move_id: null
+        date_in_millis: 21511905571743
+    -
+        id: 213592321850
+        user_id: 254289619
+        type: income
+        detail: payment
+        amount: 2181.9
+        currency_id: BRL
+        reference_id: 7139331126
+        site_id: MLB
+        client_id: 0
+        financial_entity: credit_card
+        status: available
+        label:
+            - bacen_available
+        date_created: '2016-11-12T16:24:33.000-04:00'
+        date_released: '2016-11-21T19:05:17.000-04:00'
+        balanced_amount: 60074.56
+        original_move_id: null
+        date_in_millis: 21510518273328
+    -
+        id: 212608777640
+        user_id: 254289619
+        type: income
+        detail: payment
+        amount: 236.9
+        currency_id: BRL
+        reference_id: 2848915496
+        site_id: MLB
+        client_id: 0
+        financial_entity: credit_card
+        status: available
+        label:
+            - bacen_available
+        date_created: '2016-07-12T12:34:22.000-04:00'
+        date_released: '2016-07-28T11:45:00.000-04:00'
+        balanced_amount: 210983.19
+        original_move_id: null
+        date_in_millis: 21499877262964
+    -
+        id: 212608428540
+        user_id: 254289619
+        type: income
+        detail: payment
+        amount: 2152.8
+        currency_id: BRL
+        reference_id: 2849200306
+        site_id: MLB
+        client_id: 0
+        financial_entity: credit_card
+        status: available
+        label:
+            - bacen_available
+        date_created: '2016-07-12T11:48:59.000-04:00'
+        date_released: '2016-07-16T16:54:01.000-04:00'
+        balanced_amount: 210807.61
+        original_move_id: null
+        date_in_millis: 21499874539784
+    -
+        id: 212612769380
+        user_id: 254289619
+        type: income
+        detail: payment
+        amount: 863.8
+        currency_id: BRL
+        reference_id: 2849872080
+        site_id: MLB
+        client_id: 0
+        financial_entity: credit_card
+        status: available
+        label:
+            - bacen_available
+        date_created: '2016-07-12T16:58:00.000-04:00'
+        date_released: '2016-07-21T17:58:16.000-04:00'
+        balanced_amount: 211799.93
+        original_move_id: null
+        date_in_millis: 21499893080119
+    -
+        id: 212387435690
+        user_id: 254289619
+        type: income
+        detail: payment
+        amount: 2130.9
+        currency_id: BRL
+        reference_id: 2797522270
+        site_id: MLB
+        client_id: 0
+        financial_entity: credit_card
+        status: available
+        label:
+            - bacen_available
+        date_created: '2016-06-16T15:55:41.000-04:00'
+        date_released: '2016-06-29T12:42:00.000-04:00'
+        balanced_amount: 5202.29
+        original_move_id: null
+        date_in_millis: 21497642941568
