@@ -50,6 +50,10 @@ class Bootstrap
         $loggableListener = new \Gedmo\Loggable\LoggableListener();
         $loggableListener->setAnnotationReader($cachedAnnotationReader);
         $evm->addEventSubscriber($loggableListener);
+        
+        //SQL log
+        // $logger = new \Doctrine\DBAL\Logging\EchoSQLLogger();
+        // $config->setSQLLogger($logger);
 
         // timestampable
         $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();

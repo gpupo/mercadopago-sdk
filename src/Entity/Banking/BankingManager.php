@@ -74,8 +74,20 @@ class BankingManager extends GenericManager
 
     protected function resolveKeysFromHeader($array)
     {
-        return array_map(function ($v) {
-            return ltrim(strtolower($v), 'mp_');
-        }, str_getcsv($array));
+        $keys = [];
+
+        foreach(str_getcsv($array) as $value)
+        {
+            $key = str_replace([
+                'mp_',
+                'reference',
+            ],[
+                '',
+                'id',
+            ],strtolower($value));
+            $keys[] = $key;
+        }
+
+        return $keys;
     }
 }

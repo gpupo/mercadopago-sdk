@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace  Gpupo\MercadopagoSdk\Tests\Entity;
 
 use Gpupo\Common\Entity\Collection;
-use  Gpupo\CommonSchema\ArrayCollection\Trading\Payment\Payment;
+use Gpupo\CommonSchema\ArrayCollection\Trading\Order\Shipping\Payment\Payment;
 use Gpupo\MercadopagoSdk\Tests\TestCaseAbstract;
 use Symfony\Component\Yaml\Yaml;
 
@@ -47,11 +47,8 @@ class MovementManagerTest extends TestCaseAbstract
         $this->assertSame($raw['transaction_details']['net_received_amount'], $payment->getTransactionNetAmount(), 'Detail net');
         $this->assertSame($raw['transaction_details']['total_paid_amount'], $payment->getTotalPaidAmount(), 'Detail paid');
         $this->assertSame('BRL', $payment->getCurrencyId(), 'currency');
-        $this->assertSame(254289619, $payment->getCollector()->getIdentifier(), 'Collector ID');
         $this->assertSame(0.0, $payment->getOverpaidAmount());
-
         // file_put_contents('var/cache/payment.yaml', Yaml::dump($payment->toArray(), 4, 4));
-        //dump($payment);
     }
 
     protected function mockupManager($file)

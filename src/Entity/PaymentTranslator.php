@@ -19,7 +19,7 @@ namespace Gpupo\MercadopagoSdk\Entity;
 
 use Gpupo\Common\Entity\CollectionInterface;
 use Gpupo\CommonSchema\AbstractTranslator;
-use Gpupo\CommonSchema\ArrayCollection\Trading\Payment\Payment;
+use Gpupo\CommonSchema\ArrayCollection\Trading\Order\Shipping\Payment\Payment;
 use Gpupo\CommonSdk\Traits\LoadTrait;
 
 class PaymentTranslator extends AbstractTranslator

@@ -21,7 +21,8 @@ foreach ([
     'id' => 'payment_number',
     'currency_id' => 'currency_id',
     'status' => 'status',
-    'external_reference' => 'transaction_order_id',
+    'collector' => 'collector_id',
+    'external_id' => 'transaction_order_id',
     'status_detail' => 'status_detail',
     'transaction_amount' => 'transaction_amount',
     'date_created' => 'date_created',
@@ -37,10 +38,6 @@ foreach ([
 ] as $origin => $destination) {
     $foreign[$destination] = $native->get($origin);
 }
-
-$foreign['collector'] = [
-    'identifier' => $native->get('collector_id'),
-];
 
 $transaction = $native->get('transaction_details');
 $foreign['total_paid_amount'] = $transaction['total_paid_amount'];

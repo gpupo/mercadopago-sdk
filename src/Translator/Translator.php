@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace Gpupo\MercadopagoSdk\Translator;
 
 use Gpupo\CommonSchema\AbstractTranslator;
-use Gpupo\CommonSchema\ArrayCollection\Trading\Payment\Payment;
+use Gpupo\CommonSchema\ArrayCollection\Trading\Order\Shipping\Payment\Payment;
 use Gpupo\CommonSchema\TranslatorDataCollection;
 use Gpupo\CommonSchema\TranslatorException;
 use Gpupo\CommonSchema\TranslatorInterface;
