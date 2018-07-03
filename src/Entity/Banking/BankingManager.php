@@ -76,15 +76,14 @@ class BankingManager extends GenericManager
     {
         $keys = [];
 
-        foreach(str_getcsv($array) as $value)
-        {
+        foreach (str_getcsv($array) as $value) {
             $key = str_replace([
                 'mp_',
                 'reference',
-            ],[
+            ], [
                 '',
                 'id',
-            ],strtolower($value));
+            ], strtolower($value));
             $keys[] = $key;
         }
 

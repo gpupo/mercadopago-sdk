@@ -40,10 +40,10 @@ class MovementManagerTest extends TestCaseAbstract
     public function testFindPaymentById()
     {
         $manager = $this->mockupManager('mockup/Movement/payment.yaml');
-        $payment = $manager->findPaymentById(5046323112);
+        $payment = $manager->findPaymentById(775046323112);
         $raw = $payment->getExpands();
         $this->assertInstanceOf(Payment::class, $payment);
-        $this->assertSame(5046323112, $payment->getPaymentNumber(), 'Payment Number');
+        $this->assertSame(775046323112, $payment->getPaymentNumber(), 'Payment Number');
         $this->assertSame($raw['transaction_details']['net_received_amount'], $payment->getTransactionNetAmount(), 'Detail net');
         $this->assertSame($raw['transaction_details']['total_paid_amount'], $payment->getTotalPaidAmount(), 'Detail paid');
         $this->assertSame('BRL', $payment->getCurrencyId(), 'currency');

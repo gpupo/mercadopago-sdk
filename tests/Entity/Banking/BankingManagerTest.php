@@ -18,9 +18,9 @@ declare(strict_types=1);
 namespace  Gpupo\MercadopagoSdk\Tests\Entity\Banking;
 
 use Gpupo\Common\Entity\Collection;
+use Gpupo\CommonSchema\ORM\Decorator\Banking\Report\Records;
 use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Record;
 use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Report;
-use Gpupo\CommonSchema\ORM\Decorator\Banking\Report\Records;
 use Gpupo\MercadopagoSdk\Tests\TestCaseAbstract;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -50,6 +50,7 @@ class BankingManagerTest extends TestCaseAbstract
     {
         $manager = $this->getFactory()->factoryManager('banking');
         $report = $manager->findReportById('bank-report-123.csv');
+
         $this->assertInstanceOf(Report::class, $report);
         $entityManager = $this->getDoctrineEntityManager();
         $repository = $entityManager->getRepository(Report::class);
@@ -61,7 +62,6 @@ class BankingManagerTest extends TestCaseAbstract
 
         $entityManager->persist($report);
         $entityManager->flush();
-
 
         $row = $repository->findByFileName('bank-report-123.csv');
         $this->assertInstanceOf(Report::class, $row);
@@ -75,9 +75,9 @@ class BankingManagerTest extends TestCaseAbstract
         $list = $repository->findByExternalId(1657955112);
         $this->assertNotNull($list);
 
-        $this->assertSame(2, $list->count());
+        $this->assertSame(2, $list->count(), 'Count records');
 
-        foreach($list as $record) {
+        foreach ($list as $record) {
             $this->assertInstanceOf(Record::class, $record);
             $this->assertSame(1657955112, $record->getExternalId());
         }
@@ -86,8 +86,8 @@ class BankingManagerTest extends TestCaseAbstract
     }
 
     /**
-    * @depends testFindTradingRecords
-    */
+     * @depends testFindTradingRecords
+     */
     public function testSumOfRecordsWithMediation(Records $records)
     {
         $this->assertSame(0.0, $records->getTotalOf('gross_amount'), 'gross');
@@ -102,27 +102,6 @@ class BankingManagerTest extends TestCaseAbstract
 
         $this->assertSame(289.32, $records->getTotalOf('net_credit_amount'), 'credit');
         $this->assertSame(289.32, $records->getTotalOf('net_debit_amount'), 'debit');
-    }
-
-    public function testSumOfRecordsWithoutMediation()
-    {
-        $records = $this->getDoctrineEntityManager()->getRepository(Record::class)
-            ->findByExternalId(1698739593);
-
-        $this->assertSame(117.6, $records->getTotalOf('gross_amount'), 'gross');
-        $this->assertSame(-18.82, $records->getTotalOf('fee_amount'), 'fee');
-
-        $this->assertSame(0.0, $records->getTotalOf('financing_fee_amount'), 'financing_fee');
-        $this->assertSame(0.0, $records->getTotalOf('shipping_fee_amount'), 'shipping_fee');
-        $this->assertSame(0.0, $records->getTotalOf('taxes_amount'), 'taxes');
-        $this->assertSame(0.0, $records->getTotalOf('coupon_amount'), 'coupon');
-
-        $this->assertSame(98.78, $records->getTotalOf('net_credit_amount'), 'credit');
-        $this->assertSame(0.0, $records->getTotalOf('net_debit_amount'), 'debit');
-
-        $sum = ($records->getTotalOf('fee_amount', true) + $records->getTotalOf('net_credit_amount'));
-
-        $this->assertSame($records->getTotalOf('gross_amount'), $sum, 'double check');
     }
 
     protected function mockupManager($file = null)

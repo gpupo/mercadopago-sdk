@@ -1,5 +1,5 @@
 ---
-id: 5046323112
+id: 775046323112
 date_created: '2016-12-09T09:47:39.000-04:00'
 date_approved: '2016-12-12T06:46:29.000-04:00'
 date_last_updated: '2016-12-12T06:46:29.000-04:00'
@@ -61,7 +61,7 @@ transaction_details:
   net_received_amount: 204.88
   total_paid_amount: 243.9
   overpaid_amount: 0
-  external_resource_url: https://www.mercadopago.com/mlb/payments/ticket/helper?payment_id=5046323112&payment_method_reference_id=2717744337&caller_id=179119340
+  external_resource_url: https://www.mercadopago.com/mlb/payments/ticket/helper?payment_id=775046323112&payment_method_reference_id=2717744337&caller_id=179119340
   installment_amount: 243.9
   financial_institution:
   payment_method_reference_id: '2717744337'

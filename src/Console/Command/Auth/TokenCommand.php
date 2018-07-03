@@ -20,6 +20,7 @@ namespace Gpupo\MercadopagoSdk\Console\Command\Auth;
 use Gpupo\MercadopagoSdk\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Gpupo\CommonSchema\ORM\Entity\Application\API\OAuth\Client\AccessToken;
 
 final class TokenCommand extends AbstractCommand
 {
@@ -30,7 +31,7 @@ final class TokenCommand extends AbstractCommand
     {
         $this
             ->setName(self::prefix.'auth:token')
-            ->setDescription('Get MercadoPago token');
+            ->setDescription('Get new access token');
     }
 
     /**
@@ -38,14 +39,17 @@ final class TokenCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $client = $this->getFactory()->getClient();
-
         try {
-            $data = $client->requestToken();
+            $data = $this->requestNewAccessToken();
 
             return $this->saveCredentials($data->toArray(), $output);
         } catch (\Exception $exception) {
             $output->writeln(sprintf('Error: <bg=red>%s</>', $exception->getmessage()));
         }
+    }
+
+    public function requestNewAccessToken()
+    {
+        return $this->getFactory()->getClient()->requestToken();
     }
 }

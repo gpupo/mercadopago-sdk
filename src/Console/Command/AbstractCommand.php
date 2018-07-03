@@ -128,7 +128,9 @@ abstract class AbstractCommand extends Command
             ]);
         }
 
-        return $this->writeProjectData($data);
+        $this->writeProjectData($data);
+        
+        return $data;
     }
 
     protected function getSchema(EntityInterface $object)
