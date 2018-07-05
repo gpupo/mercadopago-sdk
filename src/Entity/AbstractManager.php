@@ -21,13 +21,10 @@ use Gpupo\CommonSchema\Converters\ConverterContainerTrait;
 use Gpupo\CommonSdk\Entity\EntityInterface;
 use Gpupo\CommonSdk\Entity\ManagerAbstract;
 use  Gpupo\CommonSdk\Entity\ManagerInterface;
-use Gpupo\Common\Interfaces\OptionsInterface;
-use Gpupo\Common\Traits\OptionsTrait;
 
-abstract class AbstractManager extends ManagerAbstract implements ManagerInterface, OptionsInterface
+abstract class AbstractManager extends ManagerAbstract implements ManagerInterface
 {
     use ConverterContainerTrait;
-    use OptionsTrait;
 
     public function factoryMap($operation, array $parameters = null)
     {

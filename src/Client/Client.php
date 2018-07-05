@@ -42,7 +42,7 @@ final class Client extends ClientAbstract implements ClientInterface
             'verbose' => true,
             'cacheTTL' => 3600,
             'offset' => 0,
-            'limit' => 0,
+            'limit' => 30,
         ];
     }
 
