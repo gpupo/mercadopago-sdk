@@ -18,12 +18,13 @@ declare(strict_types=1);
 namespace Gpupo\MercadopagoSdk;
 
 use Gpupo\CommonSdk\FactoryAbstract;
+use Gpupo\CommonSdk\FactoryInterface;
 use Gpupo\MercadopagoSdk\Client\Client;
 
 /**
  * Construtor principal, estendido pelo Factory de MarkethubBundle.
  */
-class Factory extends FactoryAbstract
+class Factory extends FactoryAbstract implements FactoryInterface
 {
     public function setClient(array $clientOptions = [])
     {
