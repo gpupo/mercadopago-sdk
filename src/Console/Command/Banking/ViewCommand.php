@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace Gpupo\MercadopagoSdk\Console\Command\Banking;
 
 use Gpupo\Common\Traits\TableTrait;
+use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Report;
 use Gpupo\MercadopagoSdk\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -49,7 +50,11 @@ class ViewCommand extends AbstractCommand
         $manager = $this->getFactory()->factoryManager('banking');
 
         try {
-            $report = $manager->findReportById($filename);
+            $report = new Report();
+            $report->setFileName($filename);
+            $report->setInstitution('mercadopago');
+
+            $report = $manager->fillReport($report);
 
             if (!$report) {
                 throw new \Exception('Report Not Found');

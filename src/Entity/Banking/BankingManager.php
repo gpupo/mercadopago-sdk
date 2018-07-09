@@ -17,7 +17,10 @@ declare(strict_types=1);
 
 namespace Gpupo\MercadopagoSdk\Entity\Banking;
 
-use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
+use Gpupo\Common\Entity\ArrayCollection;
+use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Record;
+use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report as ReportAC;
+use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Report;
 use Gpupo\MercadopagoSdk\Entity\GenericManager;
 
 class BankingManager extends GenericManager
@@ -32,13 +35,20 @@ class BankingManager extends GenericManager
 
     public function getReportList()
     {
-        return $this->getFromRoute(['GET', '/v1/account/bank_report/list?access_token={access_token}']);
+        $list = $this->getFromRoute(['GET', '/v1/account/bank_report/list?access_token={access_token}']);
+        $collection = new ArrayCollection();
+        foreach ($list as $array) {
+            $report = new ReportAC($array);
+            $collection->add($report);
+        }
+
+        return $collection;
     }
 
-    public function findReportById($filename)
+    public function fillReport(Report $report)
     {
-        $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/bank_report/%s?access_token={access_token}', $filename)]);
-        $destination = sprintf('var/cache/%s', $filename);
+        $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/bank_report/%s?access_token={access_token}', $report->getFileName())]);
+        $destination = sprintf('var/cache/%s', $report->getFileName());
 
         if (!file_exists($destination)) {
             $this->getClient()->downloadFile($map->getResource(), $destination);
@@ -52,11 +62,6 @@ class BankingManager extends GenericManager
 
         $keys = $this->resolveKeysFromHeader(array_shift($lines));
 
-        $report = new Report([
-            'file_name' => $filename,
-            'institution' => 'mercadopago',
-        ]);
-
         foreach ($lines as $value) {
             $line = [
             ];
@@ -65,11 +70,14 @@ class BankingManager extends GenericManager
             }
 
             if (!empty($line['date'])) {
-                $report->getRecords()->factoryElementAndAdd($line);
+                $rac = new Record($line);
+                $record = $rac->toOrm();
+                $record->setReport($report);
+                $report->addRecord($record);
             }
         }
 
-        return $this->setConversionType('ORM')->decorateByConversionType($report);
+        return $this->decorateByConversionType($report);
     }
 
     protected function resolveKeysFromHeader($array)

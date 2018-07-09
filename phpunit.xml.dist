@@ -36,7 +36,11 @@
             </exclude>
         </whitelist>
     </filter>
-
+    <groups>
+      <exclude>
+       <group>large</group>
+      </exclude>
+     </groups>
     <!-- Customize your parameters ! -->
     <php>
         <const name="CLIENT_ID" value="123456"/>

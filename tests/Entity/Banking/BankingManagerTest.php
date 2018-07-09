@@ -17,12 +17,14 @@ declare(strict_types=1);
 
 namespace  Gpupo\MercadopagoSdk\Tests\Entity\Banking;
 
-use Gpupo\Common\Entity\Collection;
+use Gpupo\Common\Entity\ArrayCollection;
 use Gpupo\CommonSchema\ORM\Decorator\Banking\Report\Records;
 use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Record;
 use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Report;
 use Gpupo\MercadopagoSdk\Tests\TestCaseAbstract;
 use Symfony\Component\Filesystem\Filesystem;
+
+// use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
 
 /**
  * @coversDefaultClass \Gpupo\MercadopagoSdk\Entity\Banking\BankingManager
@@ -33,7 +35,7 @@ class BankingManagerTest extends TestCaseAbstract
     {
         $manager = $this->mockupManager('mockup/Banking/reports.yaml');
         $list = $manager->getReportList();
-        $this->assertInstanceOf(Collection::class, $list);
+        $this->assertInstanceOf(ArrayCollection::class, $list);
     }
 
     public function testFindReportById()
@@ -41,7 +43,7 @@ class BankingManagerTest extends TestCaseAbstract
         $manager = $this->getFactory()->factoryManager('banking');
         $fileSystem = new Filesystem();
         $fileSystem->copy(static::getResourcesPath().'/mockup/Banking/bank-report-123.csv', static::getVarPath().'/cache/bank-report-123.csv');
-        $report = $manager->findReportById('bank-report-123.csv');
+        $report = $manager->fillReport($this->factoryReport());
         $this->assertInstanceOf(Report::class, $report);
         $this->assertInstanceOf(Record::class, $report->getRecords()->first());
     }
@@ -49,7 +51,8 @@ class BankingManagerTest extends TestCaseAbstract
     public function testPersist()
     {
         $manager = $this->getFactory()->factoryManager('banking');
-        $report = $manager->findReportById('bank-report-123.csv');
+
+        $report = $manager->fillReport($this->factoryReport());
 
         $this->assertInstanceOf(Report::class, $report);
         $entityManager = $this->getDoctrineEntityManager();
@@ -69,6 +72,9 @@ class BankingManagerTest extends TestCaseAbstract
         $this->assertInstanceOf(Record::class, $row->getRecords()->first());
     }
 
+    /**
+     * @large
+     */
     public function testFindTradingRecords()
     {
         $repository = $this->getDoctrineEntityManager()->getRepository(Record::class);
@@ -87,6 +93,7 @@ class BankingManagerTest extends TestCaseAbstract
 
     /**
      * @depends testFindTradingRecords
+     * @large
      */
     public function testSumOfRecordsWithMediation(Records $records)
     {
@@ -102,6 +109,15 @@ class BankingManagerTest extends TestCaseAbstract
 
         $this->assertSame(289.32, $records->getTotalOf('net_credit_amount'), 'credit');
         $this->assertSame(289.32, $records->getTotalOf('net_debit_amount'), 'debit');
+    }
+
+    protected function factoryReport()
+    {
+        $report = new Report();
+        $report->setFileName('bank-report-123.csv');
+        $report->setInstitution('mercadopago');
+
+        return $report;
     }
 
     protected function mockupManager($file = null)

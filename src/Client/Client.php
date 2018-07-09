@@ -17,9 +17,9 @@ declare(strict_types=1);
 
 namespace Gpupo\MercadopagoSdk\Client;
 
+use Gpupo\CommonSchema\ArrayCollection\Application\API\OAuth\Client\AccessToken;
 use Gpupo\CommonSdk\Client\ClientAbstract;
 use Gpupo\CommonSdk\Client\ClientInterface;
-use Gpupo\CommonSchema\ArrayCollection\Application\API\OAuth\Client\AccessToken;
 
 final class Client extends ClientAbstract implements ClientInterface
 {

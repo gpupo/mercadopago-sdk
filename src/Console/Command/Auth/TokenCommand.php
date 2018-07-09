@@ -20,10 +20,14 @@ namespace Gpupo\MercadopagoSdk\Console\Command\Auth;
 use Gpupo\MercadopagoSdk\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Gpupo\CommonSchema\ORM\Entity\Application\API\OAuth\Client\AccessToken;
 
 final class TokenCommand extends AbstractCommand
 {
+    public function requestNewAccessToken()
+    {
+        return $this->getFactory()->getClient()->requestToken();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -46,10 +50,5 @@ final class TokenCommand extends AbstractCommand
         } catch (\Exception $exception) {
             $output->writeln(sprintf('Error: <bg=red>%s</>', $exception->getmessage()));
         }
-    }
-
-    public function requestNewAccessToken()
-    {
-        return $this->getFactory()->getClient()->requestToken();
     }
 }

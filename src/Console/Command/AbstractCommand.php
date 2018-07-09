@@ -129,7 +129,7 @@ abstract class AbstractCommand extends Command
         }
 
         $this->writeProjectData($data);
-        
+
         return $data;
     }
 
