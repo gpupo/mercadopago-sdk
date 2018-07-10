@@ -21,6 +21,7 @@ use Gpupo\Common\Entity\ArrayCollection;
 use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Record;
 use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report as ReportAC;
 use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Report;
+use Gpupo\CommonSdk\Exception\ManagerException;
 use Gpupo\MercadopagoSdk\Entity\GenericManager;
 
 class BankingManager extends GenericManager
@@ -38,7 +39,8 @@ class BankingManager extends GenericManager
         $list = $this->getFromRoute(['GET', '/v1/account/bank_report/list?access_token={access_token}']);
         $collection = new ArrayCollection();
         foreach ($list as $array) {
-            $report = new ReportAC($array);
+            $translated = $this->translateReportDataToCommon($array);
+            $report = new ReportAC($translated);
             $collection->add($report);
         }
 
@@ -57,7 +59,7 @@ class BankingManager extends GenericManager
         $lines = file($destination, FILE_IGNORE_NEW_LINES);
 
         if (empty($lines)) {
-            throw new \Exception('Empty Report');
+            throw new ManagerException('Empty Report');
         }
 
         $keys = $this->resolveKeysFromHeader(array_shift($lines));
@@ -69,15 +71,52 @@ class BankingManager extends GenericManager
                 $line[$keys[$k]] = $v;
             }
 
+            $errors = [];
+
             if (!empty($line['date'])) {
-                $rac = new Record($line);
-                $record = $rac->toOrm();
-                $record->setReport($report);
-                $report->addRecord($record);
+                $translatedLine = $this->translateRecordDataToCommon($line, $report);
+                $rac = new Record($translatedLine);
+                if ('initial_available_balance' === $rac->getRecordType()) {
+                    $report->addExpand('initial_available_balance', $rac->getExpands());
+                } elseif (in_array($rac->getDescription(), ['withdrawal', 'reserve_for_payment'], true)) {
+                    $report->addExpand($rac->getDescription(), $rac->getExpands());
+                } elseif (0 === $rac->getSourceId()) {
+                    $errors['unknow'][] = $rac->getExpands();
+                } else {
+                    $record = $rac->toOrm();
+                    $record->setReport($report);
+                    $report->addRecord($record);
+                }
+
+                $report->addExpand('errors', $errors);
             }
         }
 
         return $this->decorateByConversionType($report);
+    }
+
+    protected function translateReportDataToCommon(array $array): array
+    {
+        $translated = array_merge([
+            'institution' => 'mercadopago',
+            'generated_date' => $array['date_created'],
+            'external_id' => $array['id'],
+            'description' => $array['created_from'],
+            'tags' => current(explode('_', $array['created_from'])),
+            'expands' => $array,
+        ], $array);
+
+        return $translated;
+    }
+
+    protected function translateRecordDataToCommon(array $array, Report $report): array
+    {
+        $translated = array_merge([
+            'tags' => [$report->getDescription()],
+            'expands' => $array,
+        ], $array);
+
+        return $translated;
     }
 
     protected function resolveKeysFromHeader($array)

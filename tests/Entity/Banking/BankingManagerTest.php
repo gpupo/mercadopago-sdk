@@ -48,6 +48,9 @@ class BankingManagerTest extends TestCaseAbstract
         $this->assertInstanceOf(Record::class, $report->getRecords()->first());
     }
 
+    /**
+     * @large
+     */
     public function testPersist()
     {
         $manager = $this->getFactory()->factoryManager('banking');
