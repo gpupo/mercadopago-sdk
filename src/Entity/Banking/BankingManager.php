@@ -34,7 +34,7 @@ class BankingManager extends GenericManager
         ]);
     }
 
-    public function getReportList()
+    public function getReportList(): ArrayCollection
     {
         $list = $this->getFromRoute(['GET', '/v1/account/bank_report/list?access_token={access_token}']);
         $collection = new ArrayCollection();

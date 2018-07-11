@@ -19,8 +19,10 @@ namespace  Gpupo\MercadopagoSdk\Tests\Entity;
 
 use Gpupo\Common\Entity\Collection;
 use Gpupo\CommonSchema\ArrayCollection\Trading\Order\Shipping\Payment\Payment;
+use Gpupo\CommonSchema\ORM\Entity\Banking\Movement\Movement;
 use Gpupo\MercadopagoSdk\Tests\TestCaseAbstract;
 use Symfony\Component\Yaml\Yaml;
+use Gpupo\Common\Entity\ArrayCollection;
 
 /**
  * @coversDefaultClass \Gpupo\MercadopagoSdk\Entity\MovementManager
@@ -35,6 +37,16 @@ class MovementManagerTest extends TestCaseAbstract
         $this->assertSame(4350.87, $balance->getAvailableBalance());
         $this->assertSame(7987.58, $balance->getUnavailableBalance());
         $this->assertSame(12338.45, $balance->getTotalAmount());
+    }
+
+    public function testGetMovementList()
+    {
+        $manager = $this->mockupManager('mockup/Movement/search-income.yaml');
+        $arrayCollection = $manager->getMovementList();
+        $this->assertInstanceOf(ArrayCollection::class, $arrayCollection);
+
+        $movement = $arrayCollection->first();
+        $this->assertInstanceOf(Movement::class, $movement);
     }
 
     public function testFindPaymentById()

@@ -10,7 +10,7 @@ results:
         detail: payment
         amount: 243.9
         currency_id: BRL
-          reference_id: 7231125046
+        reference_id: 7231125046
         site_id: MLB
         client_id: 0
         financial_entity: other

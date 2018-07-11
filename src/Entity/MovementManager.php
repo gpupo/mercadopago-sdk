@@ -17,9 +17,14 @@ declare(strict_types=1);
 
 namespace Gpupo\MercadopagoSdk\Entity;
 
+use Gpupo\Common\Entity\ArrayCollection;
+
+use Gpupo\CommonSchema\ArrayCollection\Banking\Movement\Movement as AC;
+use Gpupo\CommonSchema\ORM\Entity\Banking\Movement\Movement;
+
 class MovementManager extends GenericManager
 {
-    public function search($type)
+    public function searchByType($type)
     {
         return $this->getFromRoute(['GET', sprintf('/mercadopago_account/movements/search?access_token={access_token}&type=%s&offset={offset}&limit={limit}', $type)]);
     }
@@ -27,6 +32,20 @@ class MovementManager extends GenericManager
     public function getBalance()
     {
         return $this->getFromRoute(['GET', '/users/{user_id}/mercadopago_account/balance?access_token={access_token}']);
+    }
+
+    public function getMovementList(): ArrayCollection
+    {
+        $list = $this->getFromRoute(['GET', '/mercadopago_account/movements/search?access_token={access_token}&offset={offset}&limit={limit}']);
+        $collection = new ArrayCollection();
+        foreach ($list->getResults() as $array) {
+            $translated = $this->translateMovementDataToCommon($array);
+            $ac = new AC($translated);
+            $movement = $ac->toOrm();
+            $collection->add($movement);
+        }
+
+        return $collection;
     }
 
     /**
@@ -43,5 +62,16 @@ class MovementManager extends GenericManager
         $payment = $translator->translateToForeign();
 
         return $payment;
+    }
+
+    protected function translateMovementDataToCommon(array $array): array
+    {
+        $translated = array_merge([
+            'payment_id' => $array['reference_id'],
+            'state' => $array['status'],
+            'expands' => $array,
+        ], $array);
+
+        return $translated;
     }
 }
