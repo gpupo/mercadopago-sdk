@@ -67,6 +67,7 @@ class MovementManager extends GenericManager
     protected function translateMovementDataToCommon(array $array): array
     {
         $translated = array_merge([
+            'move_id' => $array['id'],
             'payment_id' => $array['reference_id'],
             'state' => $array['status'],
             'expands' => $array,
