@@ -21,6 +21,7 @@ use Gpupo\Common\Entity\ArrayCollection;
 
 use Gpupo\CommonSchema\ArrayCollection\Banking\Movement\Movement as AC;
 use Gpupo\CommonSchema\ORM\Entity\Banking\Movement\Movement;
+use Gpupo\CommonSdk\Entity\Metadata\MetadataContainer;
 
 class MovementManager extends GenericManager
 {
@@ -34,10 +35,16 @@ class MovementManager extends GenericManager
         return $this->getFromRoute(['GET', '/users/{user_id}/mercadopago_account/balance?access_token={access_token}']);
     }
 
-    public function getMovementList(): ArrayCollection
+    public function getMovementList(): MetadataContainer
     {
-        $list = $this->getFromRoute(['GET', '/mercadopago_account/movements/search?access_token={access_token}&offset={offset}&limit={limit}']);
-        $collection = new ArrayCollection();
+        $list = $this->getFromRoute(['GET', '/mercadopago_account/movements/search?access_token={access_token}&range=date_created&begin_date=NOW-1MONTH&end_date=NOW&offset={offset}&limit={limit}']);
+
+        $collection = new MetadataContainer();
+        $collection->getMetadata()
+            ->setOffset($list['paging']['offset'])
+            ->setLimit($list['paging']['limit'])
+            ->setTotalRows($list['paging']['total']);
+
         foreach ($list->getResults() as $array) {
             $translated = $this->translateMovementDataToCommon($array);
             $ac = new AC($translated);
