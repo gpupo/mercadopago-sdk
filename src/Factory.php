@@ -26,6 +26,8 @@ use Gpupo\MercadopagoSdk\Client\Client;
  */
 class Factory extends FactoryAbstract implements FactoryInterface
 {
+    protected $name = 'mercadopago-sdk';
+
     public function setClient(array $clientOptions = [])
     {
         $this->client = new Client($clientOptions, $this->getLogger(), $this->getSimpleCache());
