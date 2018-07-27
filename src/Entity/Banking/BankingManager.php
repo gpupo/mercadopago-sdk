@@ -82,6 +82,8 @@ class BankingManager extends GenericManager
                     $report->addExpand($rac->getDescription(), $rac->getExpands());
                 } elseif (0 === $rac->getSourceId()) {
                     $errors['unknow'][] = $rac->getExpands();
+                } elseif (0 === (int)$rac->getGrossAmount()) {
+                    $errors['gross_amount_zero'][] = $rac->getExpands();
                 } else {
                     $record = $rac->toOrm();
                     $record->setReport($report);
