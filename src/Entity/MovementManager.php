@@ -48,7 +48,7 @@ class MovementManager extends GenericManager
         foreach ($list->getResults() as $array) {
             $translated = $this->translateMovementDataToCommon($array);
             $ac = new AC($translated);
-            $movement = $ac->toOrm();
+            $movement = $this->tranformToOrm($ac, 'Entity\Banking\Movement\Movement');
             $collection->add($movement);
         }
 

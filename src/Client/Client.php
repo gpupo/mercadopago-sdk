@@ -23,28 +23,7 @@ use Gpupo\CommonSdk\Client\ClientInterface;
 
 final class Client extends ClientAbstract implements ClientInterface
 {
-    /**
-     * @codeCoverageIgnore
-     */
-    public function getDefaultOptions()
-    {
-        $domain = 'api.mercadopago.com';
-
-        return [
-            'client_id' => false,
-            'client_secret' => false,
-            'access_token' => false,
-            'user_id' => false,
-            'refresh_token' => false,
-            'users_url' => sprintf('https://%s/users', $domain),
-            'base_url' => sprintf('https://%s', $domain),
-            'oauth_url' => sprintf('https://%s/oauth', $domain),
-            'verbose' => true,
-            'cacheTTL' => 3600,
-            'offset' => 0,
-            'limit' => 30,
-        ];
-    }
+    protected $endpoint_domain = 'api.mercadopago.com';
 
     public function requestToken()
     {
