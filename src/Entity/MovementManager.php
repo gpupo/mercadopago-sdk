@@ -63,12 +63,11 @@ class MovementManager extends GenericManager
     public function findPaymentById($id)
     {
         $response = $this->getFromRoute(['GET', sprintf('/v1/payments/%s?access_token={access_token}', $id)]);
-
         $translator = new PaymentTranslator();
         $translator->setNative($response);
         $payment = $translator->translateToForeign();
 
-        return $payment;
+        return $this->tranformToOrm($payment, 'Entity\Trading\Order\Shipping\Payment\Payment');
     }
 
     protected function translateMovementDataToCommon(array $array): array
