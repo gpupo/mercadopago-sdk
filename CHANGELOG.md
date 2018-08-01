@@ -2,6 +2,16 @@
 VERSION 1  GET REPORTS AND MOVEMENTS
 ====================================
 
+   Version 1.2 - Transform to custom namespace
+      01/08/2018 16:06  1.2.0  initial release
+         c37887b Return Entiy
+         22f7d9a Fix object
+         1559de7 Add transform to orm
+         b7e7a05 default options
+         bc39148 Add $name
+         6ca0423 bypass gross_amount_zero
+         0af829d Restrict payment fee
+
    Version 1.1 - Improve Banking information
       13/07/2018 10:01  1.1.0  initial release
          e1b9cef Update dependency
