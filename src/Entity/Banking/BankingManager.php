@@ -85,7 +85,7 @@ class BankingManager extends GenericManager
                 } elseif (0 === (int)$rac->getGrossAmount()) {
                     $errors['gross_amount_zero'][] = $rac->getExpands();
                 } else {
-                    $record = $this->tranformToOrm($rac, 'Entity\Banking\Report\Report');
+                    $record = $this->tranformToOrm($rac, 'Entity\Banking\Report\Record');
                     $record->setReport($report);
                     $report->addRecord($record);
                 }
