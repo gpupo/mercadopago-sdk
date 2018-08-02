@@ -48,7 +48,7 @@ class MovementManager extends GenericManager
         foreach ($list->getResults() as $array) {
             $translated = $this->translateMovementDataToCommon($array);
             $ac = new AC($translated);
-            $movement = $this->tranformToOrm($ac, 'Entity\Banking\Movement\Movement');
+            $movement = $this->factoryORM($ac, 'Entity\Banking\Movement\Movement');
             $collection->add($movement);
         }
 
@@ -67,7 +67,7 @@ class MovementManager extends GenericManager
         $translator->setNative($response);
         $payment = $translator->translateToForeign();
 
-        return $this->tranformToOrm($payment, 'Entity\Trading\Order\Shipping\Payment\Payment');
+        return $this->factoryORM($payment, 'Entity\Trading\Order\Shipping\Payment\Payment');
     }
 
     protected function translateMovementDataToCommon(array $array): array

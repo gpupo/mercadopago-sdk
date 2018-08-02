@@ -19,8 +19,8 @@ namespace Gpupo\MercadopagoSdk\Entity\Banking;
 
 use Gpupo\Common\Entity\ArrayCollection;
 use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Record;
-use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report as ReportAC;
-use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Report;
+use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
+use Gpupo\CommonSchema\ORM\Entity\EntityInterface;
 use Gpupo\CommonSdk\Exception\ManagerException;
 use Gpupo\MercadopagoSdk\Entity\GenericManager;
 
@@ -40,14 +40,14 @@ class BankingManager extends GenericManager
         $collection = new ArrayCollection();
         foreach ($list as $array) {
             $translated = $this->translateReportDataToCommon($array);
-            $report = new ReportAC($translated);
-            $collection->add($report);
+            $report = new Report($translated);
+            $collection->add($this->factoryORM($report, 'Entity\Banking\Report\Report'));
         }
 
         return $collection;
     }
 
-    public function fillReport(Report $report)
+    public function fillReport(EntityInterface $report)
     {
         $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/bank_report/%s?access_token={access_token}', $report->getFileName())]);
         $destination = sprintf('var/cache/%s', $report->getFileName());
@@ -85,7 +85,7 @@ class BankingManager extends GenericManager
                 } elseif (0 === (int)$rac->getGrossAmount()) {
                     $errors['gross_amount_zero'][] = $rac->getExpands();
                 } else {
-                    $record = $this->tranformToOrm($rac, 'Entity\Banking\Report\Record');
+                    $record = $this->factoryORM($rac, 'Entity\Banking\Report\Record');
                     $record->setReport($report);
                     $report->addRecord($record);
                 }
@@ -111,7 +111,7 @@ class BankingManager extends GenericManager
         return $translated;
     }
 
-    protected function translateRecordDataToCommon(array $array, Report $report): array
+    protected function translateRecordDataToCommon(array $array, EntityInterface $report): array
     {
         $translated = array_merge([
             'tags' => [$report->getDescription()],
