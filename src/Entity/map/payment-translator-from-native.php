@@ -46,7 +46,7 @@ $foreign['transaction_net_amount'] = $transaction['net_received_amount'];
 $foreign['marketplace_fee'] = 0.0;
 
 foreach ($native->getFeeDetails() as $fee) {
-    if (in_array($fee['type'], ['ml_fee', 'mp_fee'])) {
+    if (in_array($fee['type'], ['ml_fee', 'mp_fee', 'mercadopago_fee'])) {
         $foreign['marketplace_fee'] += $fee['amount'];
     }
 }
