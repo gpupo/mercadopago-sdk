@@ -49,6 +49,13 @@ class MovementManagerTest extends TestCaseAbstract
         $this->assertInstanceOf(Movement::class, $movement);
     }
 
+    public function testMovementListEmptyResult()
+    {
+        $manager = $this->mockupManager('mockup/Movement/search-income-empty.yaml');
+        $arrayCollection = $manager->getMovementList();
+        $this->assertInstanceOf(ArrayCollection::class, $arrayCollection);
+    }
+
     public function testFindPaymentById()
     {
         $manager = $this->mockupManager('mockup/Movement/payment.yaml');
