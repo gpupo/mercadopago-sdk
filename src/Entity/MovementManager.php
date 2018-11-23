@@ -45,6 +45,11 @@ class MovementManager extends GenericManager
             ->setLimit($list['paging']['limit'])
             ->setTotalRows($list['paging']['total']);
 
+        if(!$list->getResults()){
+            $collection->clear();
+            return $collection;
+        }
+
         foreach ($list->getResults() as $array) {
             $translated = $this->translateMovementDataToCommon($array);
             $ac = new AC($translated);
