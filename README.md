@@ -2,6 +2,7 @@
 
 SDK Não Oficial para integração a partir de aplicações PHP com as APIs Mercadopago
 
+[![Build Status](https://secure.travis-ci.org/gpupo/mercadopago-sdk.png?branch=master)](http://travis-ci.org/gpupo/mercadopago-sdk)
 
 [![Paypal Donations](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WAQKVZJRG5AUJ&item_name=mercadopago-sdk)
 
@@ -50,15 +51,6 @@ Proibido:
 
 
 
----
-
-## Indicadores de qualidade
-
-[![Build Status](https://secure.travis-ci.org/gpupo/mercadopago-sdk.png?branch=master)](http://travis-ci.org/gpupo/mercadopago-sdk)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gpupo/mercadopago-sdk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/gpupo/mercadopago-sdk/?branch=master)
-
----
-
 ## Agradecimentos
 
 * A todos os que [contribuiram com patchs](https://github.com/gpupo/mercadopago-sdk/contributors);
@@ -67,8 +59,6 @@ Proibido:
 
  _- [Gilmar Pupo](https://opensource.gpupo.com/)_
 
-
----
 
 ## Instalação
 

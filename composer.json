@@ -11,20 +11,20 @@
     "keywords": ["mercadopago", "marketplace", "sdk", "api"],
     "license": "MIT",
     "require": {
-        "php": ">=7.2",
-        "ext-curl": "*",
-        "gpupo/common-sdk": "^4.5.1|dev-master",
-        "gpupo/common-schema": "^4.3|dev-master",
-        "symfony/yaml": "^4.1",
-        "monolog/monolog": "^1.11",
-        "symfony/finder": "^4.1",
-        "symfony/cache": "^4.1",
-        "symfony/filesystem": "^4.1"
+        "php": ">=7.2.6",
+        "ext-curl" : "*",
+        "gpupo/common-sdk": "^4.5.3",
+        "gpupo/common-schema": "^4.5",
+        "symfony/yaml": "^4.2.2",
+        "monolog/monolog": "^1.24",
+        "symfony/finder": "^4.2.2",
+        "symfony/cache": "^4.2.2",
+        "symfony/filesystem": "^4.2.2"
     },
     "require-dev": {
-      "phpunit/phpunit": "^7.2|dev-master",
+      "phpunit/phpunit": "^7.5.1",
+      "symfony/var-dumper": "^4.2.2",
       "phpspec/prophecy": "~1.0|dev-master",
-      "symfony/var-dumper": "^4.1|dev-master"
     },
     "autoload": {
         "psr-4": {
