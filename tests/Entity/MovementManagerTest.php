@@ -17,12 +17,12 @@ declare(strict_types=1);
 
 namespace  Gpupo\MercadopagoSdk\Tests\Entity;
 
+use Gpupo\Common\Entity\ArrayCollection;
 use Gpupo\Common\Entity\Collection;
-use Gpupo\CommonSchema\ORM\Entity\Trading\Order\Shipping\Payment\Payment;
 use Gpupo\CommonSchema\ORM\Entity\Banking\Movement\Movement;
+use Gpupo\CommonSchema\ORM\Entity\Trading\Order\Shipping\Payment\Payment;
 use Gpupo\MercadopagoSdk\Tests\TestCaseAbstract;
 use Symfony\Component\Yaml\Yaml;
-use Gpupo\Common\Entity\ArrayCollection;
 
 /**
  * @coversDefaultClass \Gpupo\MercadopagoSdk\Entity\MovementManager

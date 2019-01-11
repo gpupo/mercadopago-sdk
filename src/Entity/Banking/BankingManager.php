@@ -78,11 +78,11 @@ class BankingManager extends GenericManager
                 $rac = new Record($translatedLine);
                 if ('initial_available_balance' === $rac->getRecordType()) {
                     $report->addExpand('initial_available_balance', $rac->getExpands());
-                } elseif (in_array($rac->getDescription(), ['withdrawal', 'reserve_for_payment'], true)) {
+                } elseif (\in_array($rac->getDescription(), ['withdrawal', 'reserve_for_payment'], true)) {
                     $report->addExpand($rac->getDescription(), $rac->getExpands());
                 } elseif (0 === $rac->getSourceId()) {
                     $errors['unknow'][] = $rac->getExpands();
-                } elseif (0 === (int)$rac->getGrossAmount()) {
+                } elseif (0 === (int) $rac->getGrossAmount()) {
                     $errors['gross_amount_zero'][] = $rac->getExpands();
                 } else {
                     $record = $this->factoryORM($rac, 'Entity\Banking\Report\Record');

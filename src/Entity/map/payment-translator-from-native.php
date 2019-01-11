@@ -35,7 +35,7 @@ foreach ([
     'coupon_amount' => 'coupon_amount',
     'issuer_id' => 'issuer_id',
     'authorization_code' => 'authorization_code',
-    'shipping_amount' => 'shipping_cost'
+    'shipping_amount' => 'shipping_cost',
 ] as $origin => $destination) {
     $foreign[$destination] = $native->get($origin);
 }
@@ -46,7 +46,7 @@ $foreign['transaction_net_amount'] = $transaction['net_received_amount'];
 $foreign['marketplace_fee'] = 0.0;
 
 foreach ($native->getFeeDetails() as $fee) {
-    if (in_array($fee['type'], ['ml_fee', 'mp_fee', 'mercadopago_fee'])) {
+    if (in_array($fee['type'], ['ml_fee', 'mp_fee', 'mercadopago_fee'], true)) {
         $foreign['marketplace_fee'] += $fee['amount'];
     }
 }

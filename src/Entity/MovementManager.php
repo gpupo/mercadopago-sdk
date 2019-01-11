@@ -17,10 +17,7 @@ declare(strict_types=1);
 
 namespace Gpupo\MercadopagoSdk\Entity;
 
-use Gpupo\Common\Entity\ArrayCollection;
-
 use Gpupo\CommonSchema\ArrayCollection\Banking\Movement\Movement as AC;
-use Gpupo\CommonSchema\ORM\Entity\Banking\Movement\Movement;
 use Gpupo\CommonSdk\Entity\Metadata\MetadataContainer;
 
 class MovementManager extends GenericManager
@@ -45,8 +42,9 @@ class MovementManager extends GenericManager
             ->setLimit($list['paging']['limit'])
             ->setTotalRows($list['paging']['total']);
 
-        if(!$list->getResults()){
+        if (!$list->getResults()) {
             $collection->clear();
+
             return $collection;
         }
 
