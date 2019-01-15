@@ -26,7 +26,7 @@ class MovementManager extends GenericManager
 
     public function searchByType($type)
     {
-        return $this->getFromRoute(['GET', self::SEARCH_FUNCTION_ENDPOINT. sprintf('type=%s&offset={offset}&limit={limit}', $type)]);
+        return $this->getFromRoute(['GET', self::SEARCH_FUNCTION_ENDPOINT.sprintf('type=%s&offset={offset}&limit={limit}', $type)]);
     }
 
     public function getBalance()
@@ -39,7 +39,7 @@ class MovementManager extends GenericManager
         $list = $this->getFromRoute(
             [
                 'GET',
-                self::SEARCH_FUNCTION_ENDPOINT.'range={range}&begin_date={begin_date}&end_date={end_date}&offset={offset}&limit={limit}'
+                self::SEARCH_FUNCTION_ENDPOINT.'range={range}&begin_date={begin_date}&end_date={end_date}&offset={offset}&limit={limit}',
             ],
             [
                 'range' => 'date_created',
