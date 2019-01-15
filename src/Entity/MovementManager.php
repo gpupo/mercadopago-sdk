@@ -22,9 +22,11 @@ use Gpupo\CommonSdk\Entity\Metadata\MetadataContainer;
 
 class MovementManager extends GenericManager
 {
+    const SEARCH_FUNCTION_ENDPOINT = '/mercadopago_account/movements/search?access_token={access_token}&';
+
     public function searchByType($type)
     {
-        return $this->getFromRoute(['GET', sprintf('/mercadopago_account/movements/search?access_token={access_token}&type=%s&offset={offset}&limit={limit}', $type)]);
+        return $this->getFromRoute(['GET', self::SEARCH_FUNCTION_ENDPOINT. sprintf('type=%s&offset={offset}&limit={limit}', $type)]);
     }
 
     public function getBalance()
@@ -32,9 +34,19 @@ class MovementManager extends GenericManager
         return $this->getFromRoute(['GET', '/users/{user_id}/mercadopago_account/balance?access_token={access_token}']);
     }
 
-    public function getMovementList(): MetadataContainer
+    public function getMovementList(int $days_ago = 7): MetadataContainer
     {
-        $list = $this->getFromRoute(['GET', '/mercadopago_account/movements/search?access_token={access_token}&range=date_created&begin_date=NOW-1MONTH&end_date=NOW&offset={offset}&limit={limit}']);
+        $list = $this->getFromRoute(
+            [
+                'GET',
+                self::SEARCH_FUNCTION_ENDPOINT.'range={range}&begin_date={begin_date}&end_date={end_date}&offset={offset}&limit={limit}'
+            ],
+            [
+                'range' => 'date_created',
+                'begin_date' => sprintf('NOW-%dDAY', $days_ago),
+                'end_date' => 'NOW',
+            ]
+        );
 
         $collection = new MetadataContainer();
         $collection->getMetadata()
