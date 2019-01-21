@@ -22,7 +22,7 @@ use Gpupo\MercadopagoSdk\Entity\GenericManager;
 use Gpupo\MercadopagoSdk\Entity\MovementManager;
 use Gpupo\MercadopagoSdk\Entity\PaymentTranslator;
 use Gpupo\MercadopagoSdk\Factory;
-use Gpupo\Tests\CommonSdk\FactoryTestAbstract;
+use Gpupo\CommonSdk\Tests\FactoryTestAbstract;
 
 /**
  * @coversNothing
