@@ -27,7 +27,6 @@ use Symfony\Component\Cache\Simple\FilesystemCache;
 $cache = new FilesystemCache();
 
 $app = new Application("mercadopago-sdk");
-$app->findConfig(['./', 'bin/'], "mercadopago-sdk");
 
 $input = new ArgvInput();
 $output = new ConsoleOutput();
