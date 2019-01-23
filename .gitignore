@@ -1,7 +1,6 @@
 /build/
 /vendor/
 /var/
-app.json
 Resources/logs/*
 Resources/qualityAssurance/*
 *.phar
@@ -9,3 +8,4 @@ Resources/qualityAssurance/*
 *.cache
 phpunit.xml
 Resources/mockup/*/*-private.json
+/.env.local
