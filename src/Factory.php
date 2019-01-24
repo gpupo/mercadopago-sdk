@@ -20,6 +20,7 @@ namespace Gpupo\MercadopagoSdk;
 use Gpupo\CommonSdk\FactoryAbstract;
 use Gpupo\CommonSdk\FactoryInterface;
 use Gpupo\MercadopagoSdk\Client\Client;
+use Gpupo\MercadopagoSdk\Entity\GenericManager;
 
 /**
  * Construtor principal, estendido pelo Factory de MarkethubBundle.
@@ -38,20 +39,20 @@ class Factory extends FactoryAbstract implements FactoryInterface
         return  '\\'.__NAMESPACE__.'\Entity\\';
     }
 
-    protected function getSchema($namespace = null)
+    protected function getSchema(): array
     {
         return [
             'generic' => [
-                'manager' => sprintf('%sGenericManager', $namespace),
+                'manager' => Entity\GenericManager::class,
             ],
             'movement' => [
-                'manager' => sprintf('%sMovementManager', $namespace),
+                'manager' => Entity\MovementManager::class,
             ],
             'banking' => [
-                'manager' => sprintf('%sBanking\BankingManager', $namespace),
+                'manager' => Entity\Banking\BankingManager::class,
             ],
             'paymentTranslator' => [
-                'class' => sprintf('%sPaymentTranslator', $namespace),
+                'class' => Entity\PaymentTranslator::class,
             ],
         ];
     }
