@@ -37,7 +37,9 @@ class ListCommand extends AbstractCommand
      */
     protected function configure()
     {
-        $this->setName(self::prefix.'banking:report:list')->setDescription('Get the Report List.');
+        $this
+            ->setName(self::prefix.'banking:report:list')
+            ->setDescription('Get the Report List.');
     }
 
     /**
@@ -50,7 +52,6 @@ class ListCommand extends AbstractCommand
         try {
             $response = $manager->getReportList();
             $this->displayTableResults($output, $response, [], 40);
-            //file_put_contents('var/cache/bank-report-list.yaml', Yaml::dump($response->toArray(), 4, 4));
         } catch (\Exception $exception) {
             $output->writeln(sprintf('Error: <bg=red>%s</>', $exception->getmessage()));
         }

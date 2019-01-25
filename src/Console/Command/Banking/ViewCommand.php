@@ -61,7 +61,6 @@ class ViewCommand extends AbstractCommand
             }
 
             $this->displayTableResults($output, $report, [], 10);
-            file_put_contents('var/cache/bank-report.yaml', Yaml::dump($report, 4, 4));
         } catch (\Exception $exception) {
             $output->writeln(sprintf('Error: <bg=red>%s</>', $exception->getmessage()));
         }

@@ -9,7 +9,7 @@
  * For more information, see <https://opensource.gpupo.com/>.
  */
 
-namespace Gpupo\MercadopagoSdk\Console\Command;
+namespace Gpupo\MercadopagoSdk\Console;
 
 require dirname(__DIR__).'/config/bootstrap.php';
 
