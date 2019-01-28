@@ -20,7 +20,6 @@ namespace Gpupo\MercadopagoSdk;
 use Gpupo\CommonSdk\FactoryAbstract;
 use Gpupo\CommonSdk\FactoryInterface;
 use Gpupo\MercadopagoSdk\Client\Client;
-use Gpupo\MercadopagoSdk\Entity\GenericManager;
 
 /**
  * Construtor principal, estendido pelo Factory de MarkethubBundle.

@@ -21,7 +21,6 @@ use Gpupo\Common\Traits\TableTrait;
 use Gpupo\MercadopagoSdk\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * @see https://www.mercadopago.com.br/developers/pt/api-docs/account/conciliation-tools/

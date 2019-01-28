@@ -17,11 +17,11 @@ declare(strict_types=1);
 
 namespace Gpupo\MercadopagoSdk\Entity;
 
+use Gpupo\Common\Entity\CollectionInterface;
 use Gpupo\CommonSchema\Converters\ConverterContainerTrait;
 use Gpupo\CommonSdk\Entity\EntityInterface;
 use Gpupo\CommonSdk\Entity\ManagerAbstract;
 use Gpupo\CommonSdk\Entity\ManagerInterface;
-use Gpupo\Common\Entity\CollectionInterface;
 
 abstract class AbstractManager extends ManagerAbstract implements ManagerInterface
 {
@@ -39,17 +39,12 @@ abstract class AbstractManager extends ManagerAbstract implements ManagerInterfa
         return $this->execute($this->factoryMap($route), $entity->toJson($route));
     }
 
-    /**
-     * @param mixed $itemId
-     *
-     * @return false|Gpupo\Common\Entity\CollectionInterface
-     */
-    public function findById($itemId)
+    public function findById($itemId): ?CollectionInterface
     {
         $data = parent::findById($itemId);
 
         if (empty($data) || 404 === $data->get('status')) {
-            return false;
+            return null;
         }
 
         return $this->factoryEntity($data->toArray());
@@ -70,7 +65,7 @@ abstract class AbstractManager extends ManagerAbstract implements ManagerInterfa
         ]);
     }
 
-    protected function fetchDefaultParameters()
+    protected function fetchDefaultParameters(): array
     {
         return (array) $this->getClient()->getOptions()->toArray();
     }
@@ -87,7 +82,7 @@ abstract class AbstractManager extends ManagerAbstract implements ManagerInterfa
         return $this->factoryEntityCollection($data);
     }
 
-    protected function factoryEntityCollection($data)
+    protected function factoryEntityCollection($data): CollectionInterface
     {
         return $this->factoryNeighborObject($this->getEntityName().'Collection', $data);
     }

@@ -17,12 +17,12 @@ declare(strict_types=1);
 
 namespace Gpupo\MercadopagoSdk\Tests;
 
+use Gpupo\CommonSdk\Tests\FactoryTestAbstract;
 use Gpupo\MercadopagoSdk\Client\Client;
 use Gpupo\MercadopagoSdk\Entity\GenericManager;
 use Gpupo\MercadopagoSdk\Entity\MovementManager;
 use Gpupo\MercadopagoSdk\Entity\PaymentTranslator;
 use Gpupo\MercadopagoSdk\Factory;
-use Gpupo\CommonSdk\Tests\FactoryTestAbstract;
 
 /**
  * @coversNothing

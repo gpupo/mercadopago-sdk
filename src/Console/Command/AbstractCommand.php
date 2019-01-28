@@ -17,13 +17,8 @@ declare(strict_types=1);
 
 namespace Gpupo\MercadopagoSdk\Console\Command;
 
-use Gpupo\CommonSdk\Entity\CollectionContainerInterface;
-use Gpupo\CommonSdk\Entity\EntityInterface;
-use Gpupo\MercadopagoSdk\Factory;
 use Gpupo\CommonSdk\Console\Command\AbstractCommand as Core;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * @codeCoverageIgnore
