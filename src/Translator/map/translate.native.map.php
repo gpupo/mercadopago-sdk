@@ -31,11 +31,11 @@ $expands = [
 ];
 
  $marketplaceFee = 0;
- if ($native->get('fee_details')) {
-     foreach ($native->get('fee_details') as $fee) {
-         $marketplaceFee += $fee['amount'];
-     }
- }
+if ($native->get('fee_details')) {
+    foreach ($native->get('fee_details') as $fee) {
+        $marketplaceFee += $fee['amount'];
+    }
+}
 
  $array = [
      'operation_type' => $native->get('operation_type'),
