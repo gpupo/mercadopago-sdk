@@ -29,7 +29,7 @@ class PaymentTranslator extends AbstractTranslator
     /**
      * {@inheritdoc}
      */
-    public function translateTo()
+    public function export()
     {
         if (!$this->getNative() instanceof CollectionInterface) {
             throw new TranslatorException('Mercadopago Payment missed!');
@@ -43,7 +43,7 @@ class PaymentTranslator extends AbstractTranslator
     /**
      * {@inheritdoc}
      */
-    public function translateFrom()
+    public function import()
     {
         if (!$this->getForeign() instanceof TranslatorDataCollection) {
             throw new TranslatorException('Foreign missed!');

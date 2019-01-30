@@ -80,7 +80,7 @@ class MovementManager extends GenericManager
         $response = $this->getFromRoute(['GET', sprintf('/v1/payments/%s?access_token={access_token}', $id)]);
         $translator = new PaymentTranslator();
         $translator->setNative($response);
-        $payment = $translator->translateToForeign();
+        $payment = $translator->doExport();
 
         return $this->factoryORM($payment, 'Entity\Trading\Order\Shipping\Payment\Payment');
     }

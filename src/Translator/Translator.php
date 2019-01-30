@@ -28,11 +28,11 @@ class Translator extends AbstractTranslator implements TranslatorInterface
 {
     use LoadTrait;
 
-    public function translateFrom()
+    public function import()
     {
     }
 
-    public function translateTo()
+    public function export()
     {
         if (!$this->getNative() instanceof TranslatorDataCollection) {
             throw new TranslatorException('Native missed!');

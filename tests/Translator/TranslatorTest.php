@@ -35,7 +35,7 @@ class TranslatorTest extends TestCaseAbstract
     {
         $translator = new Translator();
         $translator->setNative($data);
-        $payment = $translator->translateTo();
+        $payment = $translator->export();
         //dump($payment);
 
         $this->assertSame($payment->getOperationType(), $data->get('operation_type'));
