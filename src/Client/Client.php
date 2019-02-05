@@ -23,7 +23,7 @@ use Gpupo\CommonSdk\Client\ClientInterface;
 
 final class Client extends ClientAbstract implements ClientInterface
 {
-    protected $endpoint_domain = 'api.mercadopago.com';
+    const ENDPOINT = 'api.mercadopago.com';
 
     public function requestToken()
     {
