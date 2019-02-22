@@ -25,6 +25,8 @@ final class Client extends ClientAbstract implements ClientInterface
 {
     const ENDPOINT = 'api.mercadopago.com';
 
+    const ACCEPT_DEFAULT = 'application/json';
+
     public function requestToken()
     {
         $pars = [
