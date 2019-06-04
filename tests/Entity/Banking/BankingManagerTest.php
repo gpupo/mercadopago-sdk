@@ -73,7 +73,23 @@ class BankingManagerTest extends TestCaseAbstract
         $this->assertInstanceOf(Report::class, $row);
         $this->assertSame('bank-report-123.csv', $row->getFileName());
         $this->assertInstanceOf(Record::class, $row->getRecords()->first());
+
+        return $report;
     }
+
+    /**
+     * @small
+     */
+    public function testTotalisations()
+    {
+        $manager = $this->getFactory()->factoryManager('banking');
+        $report = $manager->fillReport($this->factoryReport());
+        $totalisations = $report->getExpands()['totalisations'];
+        $this->assertSame(3.00, $totalisations['withdrawal_fee']);
+        $this->assertSame(18221.62, $totalisations['total']['net_credit_amount']);
+        $this->assertSame(18175.27, $totalisations['total_net']);
+    }
+
 
     /**
      * @large
