@@ -53,10 +53,14 @@ class BankingManager extends GenericManager
         $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/bank_report/%s?access_token={access_token}', $report->getFileName())]);
         $destination = sprintf('var/cache/%s', $report->getFileName());
 
-        $output->writeln(sprintf('Opening Report %s ...', $destination));
+        if ($output) {
+            $output->writeln(sprintf('Opening Report %s ...', $destination));
+        }
 
         if (!file_exists($destination)) {
-            $output->writeln(sprintf('Requesting remote Report %s ...', $destination));
+            if ($output) {
+                $output->writeln(sprintf('Requesting remote Report %s ...', $destination));
+            }
             $this->getClient()->downloadFile($map->getResource(), $destination);
         }
 
