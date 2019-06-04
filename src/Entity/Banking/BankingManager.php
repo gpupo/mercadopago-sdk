@@ -23,6 +23,7 @@ use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
 use Gpupo\CommonSchema\ORM\Entity\EntityInterface;
 use Gpupo\CommonSdk\Exception\ManagerException;
 use Gpupo\MercadopagoSdk\Entity\GenericManager;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class BankingManager extends GenericManager
 {
@@ -47,12 +48,15 @@ class BankingManager extends GenericManager
         return $collection;
     }
 
-    public function fillReport(EntityInterface $report)
+    public function fillReport(EntityInterface $report, OutputInterface $output = null)
     {
         $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/bank_report/%s?access_token={access_token}', $report->getFileName())]);
         $destination = sprintf('var/cache/%s', $report->getFileName());
 
+        $output->writeln(sprintf('Opening Report %s ...', $destination));
+
         if (!file_exists($destination)) {
+            $output->writeln(sprintf('Requesting remote Report %s ...', $destination));
             $this->getClient()->downloadFile($map->getResource(), $destination);
         }
 
@@ -63,6 +67,7 @@ class BankingManager extends GenericManager
         }
 
         $keys = $this->resolveKeysFromHeader(array_shift($lines));
+        $totalCollection = [];
 
         foreach ($lines as $value) {
             $line = [
@@ -79,6 +84,11 @@ class BankingManager extends GenericManager
                 if ('initial_available_balance' === $rac->getRecordType()) {
                     $report->addExpand('initial_available_balance', $rac->getExpands());
                 } elseif (\in_array($rac->getDescription(), ['withdrawal', 'reserve_for_payment'], true)) {
+
+                    if ('withdrawal' === $rac->getDescription()) {
+                        $totalCollection['withdrawal_fee'] = ((float) $rac->getFeeAmount() * -1);
+                    }
+
                     $report->addExpand($rac->getDescription(), $rac->getExpands());
                 } elseif (0 === $rac->getSourceId()) {
                     $errors['unknow'][] = $rac->getExpands();
@@ -91,8 +101,36 @@ class BankingManager extends GenericManager
                 }
 
                 $report->addExpand('errors', $errors);
+            } elseif(in_array($line['record_type'], ['subtotal', 'total'], true)) {
+
+                foreach(['date',
+                    'source_id',
+                    'external_id',
+                    'installments',
+                    'payment_method',
+                    'financing_fee_amount',
+                    'taxes_amount',
+                    'coupon_amount',
+                   ] as $d) {
+                    unset($line[$d]);
+                }
+
+                foreach(['net_debit_amount',
+                    'net_credit_amount',
+                    'gross_amount',
+                    'fee_amount',
+                    'shipping_fee_amount',
+                   ] as $d) {
+                    $line[$d] = (float) $line[$d];
+                }
+
+                $subtotalKey = sprintf('%s%s', $line['record_type'], (empty($line['description']) ? '' : '_') . $line['description']);
+                $totalCollection[$subtotalKey] = $line;
             }
         }
+
+        $totalCollection['total_net'] = $totalCollection['total']['net_credit_amount'] - $totalCollection['subtotal_unblock']['net_credit_amount'] - $totalCollection['withdrawal_fee'];
+        $report->addExpand('totalisations', $totalCollection);
 
         return $this->decorateByConversionType($report);
     }

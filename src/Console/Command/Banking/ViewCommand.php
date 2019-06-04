@@ -53,7 +53,7 @@ class ViewCommand extends AbstractCommand
             $report->setFileName($filename);
             $report->setInstitution('mercadopago');
 
-            $report = $manager->fillReport($report);
+            $report = $manager->fillReport($report, $output);
 
             if (!$report) {
                 throw new \Exception('Report Not Found');
