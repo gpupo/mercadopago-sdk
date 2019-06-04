@@ -84,7 +84,6 @@ class BankingManager extends GenericManager
                 if ('initial_available_balance' === $rac->getRecordType()) {
                     $report->addExpand('initial_available_balance', $rac->getExpands());
                 } elseif (\in_array($rac->getDescription(), ['withdrawal', 'reserve_for_payment'], true)) {
-
                     if ('withdrawal' === $rac->getDescription()) {
                         $totalCollection['withdrawal_fee'] = ((float) $rac->getFeeAmount() * -1);
                     }
@@ -101,9 +100,8 @@ class BankingManager extends GenericManager
                 }
 
                 $report->addExpand('errors', $errors);
-            } elseif(in_array($line['record_type'], ['subtotal', 'total'], true)) {
-
-                foreach(['date',
+            } elseif (\in_array($line['record_type'], ['subtotal', 'total'], true)) {
+                foreach (['date',
                     'source_id',
                     'external_id',
                     'installments',
@@ -111,20 +109,20 @@ class BankingManager extends GenericManager
                     'financing_fee_amount',
                     'taxes_amount',
                     'coupon_amount',
-                   ] as $d) {
+                ] as $d) {
                     unset($line[$d]);
                 }
 
-                foreach(['net_debit_amount',
+                foreach (['net_debit_amount',
                     'net_credit_amount',
                     'gross_amount',
                     'fee_amount',
                     'shipping_fee_amount',
-                   ] as $d) {
+                ] as $d) {
                     $line[$d] = (float) $line[$d];
                 }
 
-                $subtotalKey = sprintf('%s%s', $line['record_type'], (empty($line['description']) ? '' : '_') . $line['description']);
+                $subtotalKey = sprintf('%s%s', $line['record_type'], (empty($line['description']) ? '' : '_').$line['description']);
                 $totalCollection[$subtotalKey] = $line;
             }
         }
