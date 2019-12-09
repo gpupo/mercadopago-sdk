@@ -33,7 +33,9 @@ $expands = [
  $marketplaceFee = 0;
 if ($native->get('fee_details')) {
     foreach ($native->get('fee_details') as $fee) {
-        $marketplaceFee += $fee['amount'];
+        if (is_array($fee)) {
+            $marketplaceFee += $fee['amount'];
+        }
     }
 }
 
