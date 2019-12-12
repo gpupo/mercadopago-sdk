@@ -53,5 +53,7 @@ class ViewCommand extends AbstractCommand
         } catch (\Exception $exception) {
             $output->writeln(sprintf('Error: <bg=red>%s</>', $exception->getmessage()));
         }
+
+        return 0;
     }
 }
