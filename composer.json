@@ -29,6 +29,7 @@
     },
     "bin": ["bin/mercadopago-sdk"],
     "scripts": {
+        "test": "phpunit"
     },
     "config": {
         "preferred-install": "dist"
