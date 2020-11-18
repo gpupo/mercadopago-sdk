@@ -104,7 +104,7 @@ class BankingManager extends GenericManager
                 }
 
                 $report->addExpand('errors', $errors);
-            } elseif (\in_array($line['record_type'], ['subtotal', 'total'], true)) {
+            } elseif (array_key_exists('record_type', $line) && \in_array($line['record_type'], ['subtotal', 'total'], true)) {
                 foreach (['date',
                     'source_id',
                     'external_id',
@@ -131,6 +131,9 @@ class BankingManager extends GenericManager
             }
         }
 
+        if (!array_key_exists('total', $totalCollection)) {
+            throw new ManagerException('Report with unknow format');
+        }
         $totalCollection['total_net'] = $totalCollection['total']['net_credit_amount'] - $totalCollection['subtotal_unblock']['net_credit_amount'] - $totalCollection['withdrawal_fee'];
         $report->addExpand('totalisations', $totalCollection);
 
