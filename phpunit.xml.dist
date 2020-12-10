@@ -1,53 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="true"
-         stopOnWarning="true"
-         stopOnIncomplete="true"
-         stopOnSkipped="true"
-         bootstrap="vendor/autoload.php"
->
-    <testsuites>
-        <testsuite name="Main Test Suite">
-            <directory>tests</directory>
-        </testsuite>
-        <testsuite name="Product">
-            <directory>tests/Entity/Product/</directory>
-        </testsuite>
-        <testsuite name="Order">
-            <directory>tests/Entity/Order</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>src/</directory>
-            <exclude>
-              <directory>src/Console/</directory>
-              <directory>*.config.php</directory>
-              <directory>*.map.php</directory>
-              <directory>*.template.php</directory>
-            </exclude>
-        </whitelist>
-    </filter>
-    <groups>
-      <exclude>
-       <group>large</group>
-      </exclude>
-     </groups>
-    <!-- Customize your parameters ! -->
-    <php>
-        <const name="CLIENT_ID" value="123456"/>
-        <const name="CLIENT_SECRET" value="dontTell"/>
-        <const name="ACCESS_TOKEN" value="fooToken"/>
-        <const name="REFRESH_TOKEN" value="barFoo"/>
-        <const name="USER_ID" value="54321"/>
-        <const name="VERBOSE" value=""/>
-    </php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" backupStaticAttributes="false" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false" stopOnFailure="true" stopOnWarning="true" stopOnIncomplete="true" stopOnSkipped="true" bootstrap="vendor/autoload.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory>src/</directory>
+    </include>
+    <exclude>
+      <directory>src/Console/</directory>
+      <directory>*.config.php</directory>
+      <directory>*.map.php</directory>
+      <directory>*.template.php</directory>
+    </exclude>
+  </coverage>
+  <testsuites>
+    <testsuite name="Main Test Suite">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+  <groups>
+    <exclude>
+      <group>large</group>
+    </exclude>
+  </groups>
+  <!-- Customize your parameters ! -->
+  <php>
+    <const name="CLIENT_ID" value="123456"/>
+    <const name="CLIENT_SECRET" value="dontTell"/>
+    <const name="ACCESS_TOKEN" value="fooToken"/>
+    <const name="REFRESH_TOKEN" value="barFoo"/>
+    <const name="USER_ID" value="54321"/>
+    <const name="VERBOSE" value=""/>
+  </php>
 </phpunit>
