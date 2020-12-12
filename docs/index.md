@@ -5,14 +5,14 @@ layout: default
 
 SDK Não Oficial para integração a partir de aplicações PHP com as APIs Mercadopago
 
-[![Build Status](https://secure.travis-ci.org/gpupo/mercadopago-sdk.png?branch=master)](http://travis-ci.org/gpupo/mercadopago-sdk)
+[![Build Status](https://secure.travis-ci.org/gpupo/mercadopago-sdk.png?branch=main)](http://travis-ci.org/gpupo/mercadopago-sdk)
 
 [![Paypal Donations](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WAQKVZJRG5AUJ&item_name=mercadopago-sdk)
 
 
 ## Requisitos para uso
 
-* PHP *>=7.4*
+* PHP *>=8.0*
 * [curl extension](http://php.net/manual/en/intro.curl.php)
 * [Composer Dependency Manager](http://getcomposer.org)
 
