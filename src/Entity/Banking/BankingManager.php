@@ -3,16 +3,9 @@
 declare(strict_types=1);
 
 /*
- * This file is part of gpupo/mercadopago-sdk
- * Created by Gilmar Pupo <contact@gpupo.com>
- * For the information of copyright and license you should read the file
- * LICENSE which is distributed with this source code.
- * Para a informação dos direitos autorais e de licença você deve ler o arquivo
- * LICENSE que é distribuído com este código-fonte.
- * Para obtener la información de los derechos de autor y la licencia debe leer
- * el archivo LICENSE que se distribuye con el código fuente.
- * For more information, see <https://opensource.gpupo.com/>.
- *
+ * This file is part of gpupo/mercadopago-sdk created by Gilmar Pupo <contact@gpupo.com>
+ * For the information of copyright and license you should read the file LICENSE which is
+ * distributed with this source code. For more information, see <https://opensource.gpupo.com/>
  */
 
 namespace Gpupo\MercadopagoSdk\Entity\Banking;
@@ -104,7 +97,7 @@ class BankingManager extends GenericManager
                 }
 
                 $report->addExpand('errors', $errors);
-            } elseif (array_key_exists('record_type', $line) && \in_array($line['record_type'], ['subtotal', 'total'], true)) {
+            } elseif (\array_key_exists('record_type', $line) && \in_array($line['record_type'], ['subtotal', 'total'], true)) {
                 foreach (['date',
                     'source_id',
                     'external_id',
@@ -131,7 +124,7 @@ class BankingManager extends GenericManager
             }
         }
 
-        if (!array_key_exists('total', $totalCollection)) {
+        if (!\array_key_exists('total', $totalCollection)) {
             throw new ManagerException('Report with unknow format');
         }
         $totalCollection['total_net'] = $totalCollection['total']['net_credit_amount'] - $totalCollection['subtotal_unblock']['net_credit_amount'] - $totalCollection['withdrawal_fee'];
@@ -175,7 +168,7 @@ class BankingManager extends GenericManager
             ], [
                 '',
                 'id',
-            ], strtolower($value));
+            ], mb_strtolower($value));
             $keys[] = $key;
         }
 
