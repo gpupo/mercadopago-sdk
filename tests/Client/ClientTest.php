@@ -37,6 +37,12 @@ class ClientTest extends TestCaseAbstract
         return $client;
     }
 
+    public function testAccessToken()
+    {
+        $headerList = $this->factoryClient()->factoryRequest('/items')->getHeader();
+        $this->assertSame('Bearer fooToken', $headerList['Authorization']);
+    }
+
     /**
      * @depends testSucessoAoDefinirOptions
      */
