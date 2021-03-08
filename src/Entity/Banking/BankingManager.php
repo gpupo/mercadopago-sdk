@@ -22,7 +22,7 @@ class BankingManager extends GenericManager
 {
     public function requestReport()
     {
-        return $this->getFromRoute(['POST', '/v1/account/bank_report?access_token={access_token}'], null, [
+        return $this->getFromRoute(['POST', '/v1/account/bank_report'], null, [
             'begin_date' => '2017-05-01T03:00:00Z',
             'end_date' => '2017-07-11T02:59:59Z',
         ]);
@@ -30,7 +30,7 @@ class BankingManager extends GenericManager
 
     public function getReportList(): ArrayCollection
     {
-        $list = $this->getFromRoute(['GET', '/v1/account/bank_report/list?access_token={access_token}']);
+        $list = $this->getFromRoute(['GET', '/v1/account/bank_report/list']);
         $collection = new ArrayCollection();
         foreach ($list as $array) {
             $translated = $this->translateReportDataToCommon($array);
@@ -43,7 +43,7 @@ class BankingManager extends GenericManager
 
     public function fillReport(EntityInterface $report, OutputInterface $output = null)
     {
-        $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/bank_report/%s?access_token={access_token}', $report->getFileName())]);
+        $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/bank_report/%s', $report->getFileName())]);
         $destination = sprintf('var/cache/%s', $report->getFileName());
 
         if ($output) {

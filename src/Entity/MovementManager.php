@@ -15,7 +15,7 @@ use Gpupo\CommonSdk\Entity\Metadata\MetadataContainer;
 
 class MovementManager extends GenericManager
 {
-    const SEARCH_FUNCTION_ENDPOINT = '/mercadopago_account/movements/search?access_token={access_token}&';
+    const SEARCH_FUNCTION_ENDPOINT = '/mercadopago_account/movements/search?';
 
     public function searchByType($type)
     {
@@ -24,7 +24,7 @@ class MovementManager extends GenericManager
 
     public function getBalance()
     {
-        return $this->getFromRoute(['GET', '/users/{user_id}/mercadopago_account/balance?access_token={access_token}']);
+        return $this->getFromRoute(['GET', '/users/{user_id}/mercadopago_account/balance']);
     }
 
     public function getMovementList(int $days_ago = 7): MetadataContainer
@@ -70,7 +70,7 @@ class MovementManager extends GenericManager
      */
     public function findPaymentById($id)
     {
-        $response = $this->getFromRoute(['GET', sprintf('/v1/payments/%s?access_token={access_token}', $id)]);
+        $response = $this->getFromRoute(['GET', sprintf('/v1/payments/%s', $id)]);
         $translator = new PaymentTranslator();
         $translator->setNative($response);
         $payment = $translator->doExport();

@@ -39,6 +39,6 @@ class GenericManagerTest extends TestCaseAbstract
 
         $map = $manager->factorySimpleMap($route, $parameters);
         $this->assertInstanceOf(Map::class, $map);
-        $this->assertSame('/mercadopago_account/movements/search?access_token=fooToken&range=date_created&begin_date=NOW-7DAY&end_date=NOW&offset=0&limit=30', $map->getResource());
+        $this->assertSame('/mercadopago_account/movements/search?range=date_created&begin_date=NOW-7DAY&end_date=NOW&offset=0&limit=30', $map->getResource());
     }
 }
