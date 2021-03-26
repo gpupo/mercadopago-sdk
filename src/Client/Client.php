@@ -27,16 +27,42 @@ final class Client extends ClientAbstract implements ClientInterface
 
     const ACCEPT_DEFAULT = 'application/json';
 
-    public function requestToken()
+    protected $header_access_token = true;
+    
+    protected function factoryTokenBodyParameters(): array
     {
+<<<<<<< HEAD
         $pars = [
             'grant_type' => 'client_credentials',
             'client_id' => $this->getOptions()->get('client_id'),
             'client_secret' => $this->getOptions()->get('client_secret'),
         ];
+=======
+        //Client Support
+        $clientRefreshToken = $this->getOptions()->get('client_refresh_token');
+        if (!empty($clientRefreshToken)) {
+            return [
+                'grant_type' => 'refresh_token',
+                'client_id' => $this->getOptions()->get('client_id'),
+                'client_secret' => $this->getOptions()->get('client_secret'),
+                'refresh_token' => $clientRefreshToken,
+            ];
+        }
+>>>>>>> 64cf2a9 (Refactory get token)
 
+        return [
+            'grant_type' => 'client_credentials',
+            'client_id' => $this->getOptions()->get('client_id'),
+            'client_secret' => $this->getOptions()->get('client_secret'),
+        ];
+    }
+
+    public function requestToken()
+    {
         $this->setMode('form');
-        $request = $this->post($this->getOauthUrl('/token'), $pars);
+        $this->header_access_token = false;
+        $request = $this->post($this->getOauthUrl('/token'), $this->factoryTokenBodyParameters());
+        $this->header_access_token = true;
         $accessToken = $request->getData(AccessToken::class);
 
         return $accessToken;
@@ -44,6 +70,10 @@ final class Client extends ClientAbstract implements ClientInterface
 
     protected function renderAuthorization(): array
     {
+        if(false === $this->header_access_token) {
+            return [];
+        }
+        
         return [
             'Authorization' => sprintf('Bearer %s', $this->getOptions()->get('access_token')),
         ];
