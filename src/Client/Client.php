@@ -31,13 +31,6 @@ final class Client extends ClientAbstract implements ClientInterface
     
     protected function factoryTokenBodyParameters(): array
     {
-<<<<<<< HEAD
-        $pars = [
-            'grant_type' => 'client_credentials',
-            'client_id' => $this->getOptions()->get('client_id'),
-            'client_secret' => $this->getOptions()->get('client_secret'),
-        ];
-=======
         //Client Support
         $clientRefreshToken = $this->getOptions()->get('client_refresh_token');
         if (!empty($clientRefreshToken)) {
@@ -48,7 +41,6 @@ final class Client extends ClientAbstract implements ClientInterface
                 'refresh_token' => $clientRefreshToken,
             ];
         }
->>>>>>> 64cf2a9 (Refactory get token)
 
         return [
             'grant_type' => 'client_credentials',
