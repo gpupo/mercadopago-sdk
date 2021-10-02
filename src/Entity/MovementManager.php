@@ -12,6 +12,7 @@ namespace Gpupo\MercadopagoSdk\Entity;
 
 use Gpupo\CommonSchema\ArrayCollection\Banking\Movement\Movement as AC;
 use Gpupo\CommonSdk\Entity\Metadata\MetadataContainer;
+use Gpupo\Common\Entity\Collection;
 
 class MovementManager extends GenericManager
 {
@@ -76,6 +77,48 @@ class MovementManager extends GenericManager
         $payment = $translator->doExport();
 
         return $this->factoryORM($payment, 'Entity\Trading\Order\Shipping\Payment\Payment');
+    }
+
+    public function getPaymentList(int $days_ago = 7, $offset = 0, $limit = 50)
+    {
+        $list = $this->getFromRoute(
+            [
+                'GET',
+                '/v1/payments/search?range={range}&begin_date={begin_date}&end_date={end_date}&offset={offset}&limit={limit}',
+            ],
+            [
+                'range' => 'date_last_updated',
+                'begin_date' => sprintf('NOW-%dDAYS', $days_ago),
+                'end_date' => 'NOW',
+                'offset' => $offset,
+                'limit' => $limit,
+            ]
+        );
+
+        $collection = new MetadataContainer();
+
+        if (!$list->getResults()) {
+            $collection->clear();
+
+            return $collection;
+        }
+
+        foreach ($list->getResults() as $a) {
+            $array = new Collection($a);
+            $translator = new PaymentTranslator();
+            $translator->setNative($array);
+            $payment = $translator->doExport();
+
+            $collection->add($this->factoryORM($payment, 'Entity\Trading\Order\Shipping\Payment\Payment'));
+        }
+
+        if ($list['paging']['total'] > ($list['paging']['offset'] + $list['paging']['limit'])) {
+            foreach ($this->getPaymentList($days_ago, $offset+$limit, $limit) as $item) {
+                $collection->add($item);
+            }
+        }
+        
+        return $collection;
     }
 
     protected function translateMovementDataToCommon(array $array): array
