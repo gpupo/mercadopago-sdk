@@ -27,17 +27,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BankingManager extends GenericManager
 {
-    public function requestReport()
+    public function requestReport(\DateTime $beginDate, \DateTime $customEndDate = null)
     {
-        return $this->getFromRoute(['POST', '/v1/account/bank_report'], null, [
-            'begin_date' => '2017-05-01T03:00:00Z',
-            'end_date' => '2017-07-11T02:59:59Z',
+        if (empty($customEndDate)) {
+            $customEndDate = clone $beginDate;
+            $customEndDate->modify('+1 month');
+        }
+
+        return $this->getFromRoute(['POST', '/v1/account/release_report'], null, [
+            'begin_date' => $beginDate->format('Y-m-d\Th:i:s\Z'),
+            'end_date' => $customEndDate->format('Y-m-d\Th:i:s\Z'),
         ]);
     }
 
     public function getReportList(): ArrayCollection
     {
-        $list = $this->getFromRoute(['GET', '/v1/account/bank_report/list']);
+        $list = $this->getFromRoute(['GET', '/v1/account/release_report/list']);
         $collection = new ArrayCollection();
         foreach ($list as $array) {
             $translated = $this->translateReportDataToCommon($array);
@@ -50,7 +55,7 @@ class BankingManager extends GenericManager
 
     public function fillReport(EntityInterface $report, OutputInterface $output = null)
     {
-        $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/bank_report/%s', $report->getFileName())]);
+        $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/release_report/%s', $report->getFileName())]);
         $destination = sprintf('var/cache/%s', $report->getFileName());
 
         if ($output) {
