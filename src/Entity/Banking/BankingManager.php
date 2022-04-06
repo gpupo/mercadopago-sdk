@@ -74,7 +74,7 @@ class BankingManager extends GenericManager
         foreach ($lines as $value) {
             $line = [
             ];
-            foreach (str_getcsv($value) as $k => $v) {
+            foreach (str_getcsv($value, ';') as $k => $v) {
                 $line[$keys[$k]] = $v;
             }
 
@@ -166,7 +166,7 @@ class BankingManager extends GenericManager
     {
         $keys = [];
 
-        foreach (str_getcsv($array) as $value) {
+        foreach (str_getcsv($array, ';') as $value) {
             $key = str_replace([
                 'mp_',
                 'reference',
