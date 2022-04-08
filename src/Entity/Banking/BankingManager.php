@@ -16,10 +16,13 @@ use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
 use Gpupo\CommonSchema\ORM\Entity\EntityInterface;
 use Gpupo\CommonSdk\Exception\ManagerException;
 use Gpupo\MercadopagoSdk\Entity\GenericManager;
+use Gpupo\MercadopagoSdk\Traits\ReportFactoryTrait;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class BankingManager extends GenericManager
 {
+    use ReportFactoryTrait;
+
     protected $separator;
 
     public function requestReport(\DateTime $beginDate, \DateTime $customEndDate = null)
@@ -72,14 +75,8 @@ class BankingManager extends GenericManager
     public function getReportList(): ArrayCollection
     {
         $list = $this->getFromRoute(['GET', '/v1/account/release_report/list']);
-        $collection = new ArrayCollection();
-        foreach ($list as $array) {
-            $translated = $this->translateReportDataToCommon($array);
-            $report = new Report($translated);
-            $collection->add($this->factoryORM($report, 'Entity\Banking\Report\Report'));
-        }
 
-        return $collection;
+        return $this->factoryReportsFromList($list);
     }
 
     public function fillReport(EntityInterface $report, OutputInterface $output = null)
@@ -172,20 +169,6 @@ class BankingManager extends GenericManager
         $report->addExpand('totalisations', $totalCollection);
 
         return $this->decorateByConversionType($report);
-    }
-
-    protected function translateReportDataToCommon(array $array): array
-    {
-        $translated = array_merge([
-            'institution' => 'mercadopago',
-            'generated_date' => $array['date_created'],
-            'external_id' => $array['id'],
-            'description' => $array['created_from'],
-            'tags' => current(explode('_', $array['created_from'])),
-            'expands' => $array,
-        ], $array);
-
-        return $translated;
     }
 
     protected function translateRecordDataToCommon(array $array, EntityInterface $report): array
