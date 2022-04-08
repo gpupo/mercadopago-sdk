@@ -18,12 +18,17 @@ declare(strict_types=1);
 namespace Gpupo\MercadopagoSdk\Entity;
 
 use Gpupo\CommonSchema\ArrayCollection\Banking\Movement\Movement as AC;
+use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
 use Gpupo\CommonSdk\Entity\Metadata\MetadataContainer;
 use Gpupo\Common\Entity\Collection;
+use Gpupo\MercadopagoSdk\Traits\ReportFactoryTrait;
 
 class MovementManager extends GenericManager
 {
+    use ReportFactoryTrait;
+
     const SEARCH_FUNCTION_ENDPOINT = '/mercadopago_account/movements/search?';
+    const SETTLEMENT_REPORT_ENDPOINT = '/v1/account/settlement_report';
 
     public function searchByType($type)
     {
@@ -33,6 +38,13 @@ class MovementManager extends GenericManager
     public function getBalance()
     {
         return $this->getFromRoute(['GET', '/users/{user_id}/mercadopago_account/balance']);
+    }
+
+    public function getReportList(): ArrayCollection
+    {
+        $list = $this->getFromRoute(['GET', self::SETTLEMENT_REPORT_ENDPOINT . '/list']);
+
+        return $this->factoryReportsFromList($list);
     }
 
     public function getMovementList(int $days_ago = 7): MetadataContainer
