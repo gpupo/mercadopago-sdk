@@ -20,6 +20,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BankingManager extends GenericManager
 {
+    protected $separator;
+
     public function requestReport(\DateTime $beginDate, \DateTime $customEndDate = null)
     {
         if (empty($customEndDate)) {
@@ -31,6 +33,40 @@ class BankingManager extends GenericManager
             'begin_date' => $beginDate->format('Y-m-d\Th:i:s\Z'),
             'end_date' => $customEndDate->format('Y-m-d\Th:i:s\Z'),
         ]);
+    }
+
+    public function getReportConfig(): array
+    {
+        if ($config = $this->getFromRoute(['GET', '/v1/account/release_report/config'])) {
+            return $config;
+        }
+
+        return [];
+    }
+
+    public function enableReportIncludeWithdrawal(): array
+    {
+        if (empty($old_config = $this->getReportConfig())) {
+            return false;
+        }
+
+        if ($old_config['include_withdrawal_at_end'] ?? false) {
+            return true;
+        }
+
+        $changed_config = $old_config;
+        $changed_config['include_withdrawal_at_end'] = true;
+
+        return $this->updateReportConfig($changed_config);
+    }
+
+    protected function updateReportConfig(array $config): array
+    {
+        if (empty($result = $this->getFromRoute(['PUT', '/v1/account/release_report/config'], null, $config))) {
+            return [];
+        }
+
+        return $result;
     }
 
     public function getReportList(): ArrayCollection
@@ -74,7 +110,7 @@ class BankingManager extends GenericManager
         foreach ($lines as $value) {
             $line = [
             ];
-            foreach (str_getcsv($value, ';') as $k => $v) {
+            foreach (str_getcsv($value, $this->separator) as $k => $v) {
                 $line[$keys[$k]] = $v;
             }
 
@@ -162,11 +198,16 @@ class BankingManager extends GenericManager
         return $translated;
     }
 
-    protected function resolveKeysFromHeader($array)
+    protected function resolveKeysFromHeader($line)
     {
         $keys = [];
 
-        foreach (str_getcsv($array, ';') as $value) {
+        $this->separator = ';';
+        if (false != strpos($line, ',')) {
+            $this->separator = ',';
+        }
+
+        foreach (str_getcsv($line, $this->separator) as $value) {
             $key = str_replace([
                 'mp_',
                 'reference',
