@@ -16,14 +16,14 @@ use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
 use Gpupo\CommonSchema\ORM\Entity\EntityInterface;
 use Gpupo\CommonSdk\Exception\ManagerException;
 use Gpupo\MercadopagoSdk\Entity\GenericManager;
+use Gpupo\MercadopagoSdk\Traits\CsvFileProcessTrait;
 use Gpupo\MercadopagoSdk\Traits\ReportFactoryTrait;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class BankingManager extends GenericManager
 {
+    use CsvFileProcessTrait;
     use ReportFactoryTrait;
-
-    protected $separator;
 
     public function requestReport(\DateTime $beginDate, \DateTime $customEndDate = null)
     {
@@ -179,28 +179,5 @@ class BankingManager extends GenericManager
         ], $array);
 
         return $translated;
-    }
-
-    protected function resolveKeysFromHeader($line)
-    {
-        $keys = [];
-
-        $this->separator = ';';
-        if (false != strpos($line, ',')) {
-            $this->separator = ',';
-        }
-
-        foreach (str_getcsv($line, $this->separator) as $value) {
-            $key = str_replace([
-                'mp_',
-                'reference',
-            ], [
-                '',
-                'id',
-            ], mb_strtolower($value));
-            $keys[] = $key;
-        }
-
-        return $keys;
     }
 }
