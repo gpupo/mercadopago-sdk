@@ -1,0 +1,24 @@
+-
+    id: 2278013
+    user_id: 357789619
+    begin_date: '2018-02-01T03:00:00Z'
+    end_date: '2018-03-10T02:59:59Z'
+    file_name: bank-report-3577896191520881130978.csv
+    created_from: manual
+    date_created: '2018-03-12T14:58:50.000-04:00'
+-
+    id: 2278000
+    user_id: 357789619
+    begin_date: '2018-01-01T03:00:00Z'
+    end_date: '2018-03-10T02:59:59Z'
+    file_name: bank-report-3577896191520880868125.csv
+    created_from: manual
+    date_created: '2018-03-12T14:54:28.000-04:00'
+-
+    id: 2263917
+    user_id: 357789619
+    begin_date: '2018-03-06T03:00:00Z'
+    end_date: '2018-03-10T02:59:59Z'
+    file_name: bank-report-3577896191520595269090.csv
+    created_from: manual
+    date_created: '2018-03-09T07:34:29.000-04:00'

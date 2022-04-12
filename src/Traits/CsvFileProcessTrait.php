@@ -10,6 +10,10 @@ declare(strict_types=1);
 
 namespace Gpupo\MercadopagoSdk\Traits;
 
+use Gpupo\CommonSchema\ORM\Entity\EntityInterface;
+use Gpupo\CommonSdk\Exception\ManagerException;
+use Symfony\Component\Console\Output\OutputInterface;
+
 trait CsvFileProcessTrait
 {
     protected $separator;
@@ -35,5 +39,37 @@ trait CsvFileProcessTrait
         }
 
         return $keys;
+    }
+
+    public function fetchCsvFileLines(EntityInterface $report, string $endpoint, OutputInterface $output = null): array
+    {
+        $map = $this->factorySimpleMap(['GET', sprintf('%s/%s', $endpoint, $report->getFileName())]);
+        $destination = sprintf('var/cache/%s', $report->getFileName());
+
+        if ($output) {
+            $output->writeln(sprintf('Opening Report %s ...', $destination));
+        }
+
+        if (!file_exists($destination)) {
+            if ($output) {
+                $output->writeln(sprintf('Requesting remote Report %s ...', $destination));
+            }
+            $this->getClient()->downloadFile($map->getResource(), $destination);
+        }
+
+        $lines = file($destination, FILE_IGNORE_NEW_LINES);
+
+        if (empty($lines)) {
+            throw new ManagerException('Empty Report');
+        }
+
+        return $lines;
+    }
+
+    public function replaceKeysFromHeader(array $keys, array $mapFromNewKeys): array
+    {
+        return array_map(function($old_key) use ($mapFromNewKeys) {
+            return $mapFromNewKeys[$old_key] ?? $old_key;
+        }, $keys);
     }
 }
