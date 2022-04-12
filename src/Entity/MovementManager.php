@@ -19,12 +19,16 @@ namespace Gpupo\MercadopagoSdk\Entity;
 
 use Gpupo\CommonSchema\ArrayCollection\Banking\Movement\Movement as AC;
 use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
+use Gpupo\CommonSchema\ORM\Entity\EntityInterface;
 use Gpupo\CommonSdk\Entity\Metadata\MetadataContainer;
 use Gpupo\Common\Entity\Collection;
+use Gpupo\MercadopagoSdk\Traits\CsvFileProcessTrait;
 use Gpupo\MercadopagoSdk\Traits\ReportFactoryTrait;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class MovementManager extends GenericManager
 {
+    use CsvFileProcessTrait;
     use ReportFactoryTrait;
 
     const SEARCH_FUNCTION_ENDPOINT = '/mercadopago_account/movements/search?';
@@ -47,6 +51,36 @@ class MovementManager extends GenericManager
         return $this->factoryReportsFromList($list);
     }
 
+    public function fillReport(EntityInterface $report, OutputInterface $output): EntityInterface
+    {
+        $lines = $this->fetchCsvFileLines($report, self::SETTLEMENT_REPORT_ENDPOINT, $output);
+        $keys = $this->resolveKeysFromHeader(array_shift($lines));
+        $final_keys = $this->replaceKeysFromHeader($keys, [
+            'source_id' => 'id',
+            'payment_method_type' => 'financial_entity',
+            'transaction_type' => 'type',
+            'settlement_net_amount' => 'amount',
+            'settlement_currency' => 'currency_id',
+            'transaction_date' => 'date_created',
+            'settlement_date' => 'date_released',
+        ]);
+
+        foreach($lines as $raw_line) {
+            $line = str_getcsv($raw_line, $this->separator);
+            $final_line = array_combine($final_keys, $line);
+            $translated_data = $this->translateMovementDataToCommon($final_line);
+            $ac = new AC($translated_data);
+            $movement = $this->factoryORM($ac, 'Entity\Banking\Movement\Movement');
+            $movement->setReport($report);
+            $report->addMovement($movement);
+        }
+
+        return $report;
+    }
+
+    /**
+     * @deprecated
+     */
     public function getMovementList(int $days_ago = 7): MetadataContainer
     {
         $list = $this->getFromRoute(

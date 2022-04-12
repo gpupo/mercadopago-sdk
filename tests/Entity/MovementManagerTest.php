@@ -20,6 +20,7 @@ namespace  Gpupo\MercadopagoSdk\Tests\Entity;
 use Gpupo\Common\Entity\ArrayCollection;
 use Gpupo\Common\Entity\Collection;
 use Gpupo\CommonSchema\ORM\Entity\Banking\Movement\Movement;
+use Gpupo\CommonSchema\ORM\Entity\Banking\Report\Report;
 use Gpupo\CommonSchema\ORM\Entity\Trading\Order\Shipping\Payment\Payment;
 use Gpupo\MercadopagoSdk\Tests\TestCaseAbstract;
 use Symfony\Component\Yaml\Yaml;
@@ -68,6 +69,27 @@ class MovementManagerTest extends TestCaseAbstract
         $this->assertSame('BRL', $payment->getCurrencyId(), 'currency');
         $this->assertSame(0.0, $payment->getOverpaidAmount());
         // file_put_contents('var/cache/payment.yaml', Yaml::dump($payment->toArray(), 4, 4));
+    }
+
+    public function testGetReportList()
+    {
+        $manager = $this->mockupManager('mockup/Movement/reports.yaml');
+        $list = $manager->getReportList();
+        $this->assertInstanceOf(ArrayCollection::class, $list);
+        $this->assertContainsOnlyInstanceOf(Report::class, $list);
+    }
+
+    public function testFillReport()
+    {
+        $manager = $this->mockupManager('mockup/Movement/report.yaml');
+        $fake_report = new Report();
+        $fake_report->setFileName('foo.csv');
+
+        $updated_report = $manager->fillReport($fake_report);
+        $this->assertInstanceOf(Report::class, $updated_report);
+        $movements = $updated_report->getMovements();
+        $this->assertInstanceOf(ArrayCollection::class, $movements);
+        $this->assertinstanceOf(Movement::class, $movements->first());
     }
 
     protected function mockupManager($file)

@@ -88,25 +88,7 @@ class BankingManager extends GenericManager
 
     public function fillReport(EntityInterface $report, OutputInterface $output = null)
     {
-        $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/release_report/%s', $report->getFileName())]);
-        $destination = sprintf('var/cache/%s', $report->getFileName());
-
-        if ($output) {
-            $output->writeln(sprintf('Opening Report %s ...', $destination));
-        }
-
-        if (!file_exists($destination)) {
-            if ($output) {
-                $output->writeln(sprintf('Requesting remote Report %s ...', $destination));
-            }
-            $this->getClient()->downloadFile($map->getResource(), $destination);
-        }
-
-        $lines = file($destination, FILE_IGNORE_NEW_LINES);
-
-        if (empty($lines)) {
-            throw new ManagerException('Empty Report');
-        }
+        $lines = $this->fetchCsvFileLines($report, '/v1/account/release_report', $output);
 
         $keys = $this->resolveKeysFromHeader(array_shift($lines));
         $totalCollection = [];
