@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace  Gpupo\MercadopagoSdk\Tests\Entity;
 
+use Doctrine\Common\Collections\Collection as DCollection;
 use Gpupo\Common\Entity\ArrayCollection;
 use Gpupo\Common\Entity\Collection;
 use Gpupo\CommonSchema\ORM\Entity\Banking\Movement\Movement;
@@ -57,26 +58,27 @@ class MovementManagerTest extends TestCaseAbstract
         $this->assertInstanceOf(ArrayCollection::class, $arrayCollection);
     }
 
-    public function testFindPaymentById()
-    {
-        $manager = $this->mockupManager('mockup/Movement/payment.yaml');
-        $payment = $manager->findPaymentById(775046323112);
-        $raw = $payment->getExpands();
-        $this->assertInstanceOf(Payment::class, $payment);
-        $this->assertSame(775046323112, $payment->getPaymentNumber(), 'Payment Number');
-        $this->assertSame($raw['transaction_details']['net_received_amount'], $payment->getTransactionNetAmount(), 'Detail net');
-        $this->assertSame($raw['transaction_details']['total_paid_amount'], $payment->getTotalPaidAmount(), 'Detail paid');
-        $this->assertSame('BRL', $payment->getCurrencyId(), 'currency');
-        $this->assertSame(0.0, $payment->getOverpaidAmount());
-        // file_put_contents('var/cache/payment.yaml', Yaml::dump($payment->toArray(), 4, 4));
-    }
+    // public function testFindPaymentById()
+    // {
+    //     $this->markSkipped('Deprecated');
+    //     $manager = $this->mockupManager('mockup/Movement/payment.yaml');
+    //     $payment = $manager->findPaymentById(775046323112);
+    //     $raw = $payment->getExpands();
+    //     $this->assertInstanceOf(Payment::class, $payment);
+    //     $this->assertSame(775046323112, $payment->getPaymentNumber(), 'Payment Number');
+    //     $this->assertSame($raw['transaction_details']['net_received_amount'], $payment->getTransactionNetAmount(), 'Detail net');
+    //     $this->assertSame($raw['transaction_details']['total_paid_amount'], $payment->getTotalPaidAmount(), 'Detail paid');
+    //     $this->assertSame('BRL', $payment->getCurrencyId(), 'currency');
+    //     $this->assertSame(0.0, $payment->getOverpaidAmount());
+    //     // file_put_contents('var/cache/payment.yaml', Yaml::dump($payment->toArray(), 4, 4));
+    // }
 
     public function testGetReportList()
     {
         $manager = $this->mockupManager('mockup/Movement/reports.yaml');
         $list = $manager->getReportList();
         $this->assertInstanceOf(ArrayCollection::class, $list);
-        $this->assertContainsOnlyInstanceOf(Report::class, $list);
+        $this->assertContainsOnlyInstancesOf(Report::class, $list);
     }
 
     public function testFillReport()
@@ -88,8 +90,9 @@ class MovementManagerTest extends TestCaseAbstract
         $updated_report = $manager->fillReport($fake_report);
         $this->assertInstanceOf(Report::class, $updated_report);
         $movements = $updated_report->getMovements();
-        $this->assertInstanceOf(ArrayCollection::class, $movements);
-        $this->assertinstanceOf(Movement::class, $movements->first());
+        $this->assertInstanceOf(DCollection::class, $movements);
+        $this->assertInstanceOf(Movement::class, $movements->first());
+        $this->assertSame($updated_report, $movements->first()->getReport());
     }
 
     protected function mockupManager($file)
