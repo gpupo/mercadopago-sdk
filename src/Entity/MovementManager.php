@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Gpupo\MercadopagoSdk\Entity;
 
 use Gpupo\CommonSchema\ArrayCollection\Banking\Movement\Movement as AC;
-use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
+use Gpupo\CommonSchema\ArrayCollection\Banking\Movement\Report;
 use Gpupo\CommonSchema\ORM\Entity\EntityInterface;
 use Gpupo\CommonSdk\Entity\Metadata\MetadataContainer;
 use Gpupo\Common\Entity\Collection;
