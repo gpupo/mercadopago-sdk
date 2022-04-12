@@ -31,6 +31,9 @@ class MovementManager extends GenericManager
     use CsvFileProcessTrait;
     use ReportFactoryTrait;
 
+    const REPORT_ORM_CLASS = 'Entity\Banking\Movement\Report';
+    const REPORT_ARRAY_COLLECTION_CLASS = Report::class;
+
     const SEARCH_FUNCTION_ENDPOINT = '/mercadopago_account/movements/search?';
     const SETTLEMENT_REPORT_ENDPOINT = '/v1/account/settlement_report';
 
@@ -44,14 +47,14 @@ class MovementManager extends GenericManager
         return $this->getFromRoute(['GET', '/users/{user_id}/mercadopago_account/balance']);
     }
 
-    public function getReportList(): ArrayCollection
+    public function getReportList(): Collection
     {
         $list = $this->getFromRoute(['GET', self::SETTLEMENT_REPORT_ENDPOINT . '/list']);
 
         return $this->factoryReportsFromList($list);
     }
 
-    public function fillReport(EntityInterface $report, OutputInterface $output): EntityInterface
+    public function fillReport(EntityInterface $report, OutputInterface $output = null): EntityInterface
     {
         $lines = $this->fetchCsvFileLines($report, self::SETTLEMENT_REPORT_ENDPOINT, $output);
         $keys = $this->resolveKeysFromHeader(array_shift($lines));

@@ -12,7 +12,7 @@ namespace Gpupo\MercadopagoSdk\Traits;
 
 use Gpupo\Common\Entity\Collection;
 use Gpupo\CommonSchema\ORM\Entity\EntityInterface;
-use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
+use Gpupo\CommonSchema\ArrayCollection\Banking\Movement\Report;
 
 /**
  * Save common logic for mp csv reports.
@@ -28,10 +28,18 @@ trait ReportFactoryTrait
 
     public function factoryReport(array $reportData): EntityInterface
     {
-        $translated = $this->translateReportDataToCommon($reportData);
-        $report = new Report($translated);
+        if (!defined('static::REPORT_ARRAY_COLLECTION_CLASS')) {
+            throw new \LogicException('Constant with Report collection class not defined!');
+        }
 
-        return $this->factoryORM($report, 'Entity\Banking\Report\Report');
+        if (!defined('static::REPORT_ORM_CLASS')) {
+            throw new \LogicException('Constant with Report orm class not defined!');
+        }
+        $translated = $this->translateReportDataToCommon($reportData);
+        $className = static::REPORT_ARRAY_COLLECTION_CLASS;
+        $report = new $className($translated);
+
+        return $this->factoryORM($report, static::REPORT_ORM_CLASS);
     }
 
     protected function translateReportDataToCommon(array $array): array
