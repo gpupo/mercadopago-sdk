@@ -25,6 +25,9 @@ class BankingManager extends GenericManager
     use CsvFileProcessTrait;
     use ReportFactoryTrait;
 
+    const REPORT_ORM_CLASS = 'Entity\Banking\Report\Report';
+    const REPORT_ARRAY_COLLECTION_CLASS = Report::class;
+
     public function requestReport(\DateTime $beginDate, \DateTime $customEndDate = null)
     {
         if (empty($customEndDate)) {
