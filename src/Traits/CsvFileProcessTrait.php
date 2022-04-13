@@ -18,7 +18,7 @@ trait CsvFileProcessTrait
 {
     protected $separator;
 
-    protected function resolveKeysFromHeader($line)
+    protected function resolveKeysFromHeader($line, bool $cleanKeys = true)
     {
         $keys = [];
 
@@ -28,13 +28,16 @@ trait CsvFileProcessTrait
         }
 
         foreach (str_getcsv($line, $this->separator) as $value) {
-            $key = str_replace([
-                'mp_',
-                'reference',
-            ], [
-                '',
-                'id',
-            ], mb_strtolower($value));
+            if (!$cleanKeys) {
+                $keys[] = mb_strtolower($value);
+                continue;
+            }
+
+            $key = str_replace(
+                ['mp_', 'reference'], 
+                ['', 'id'], 
+                mb_strtolower($value)
+            );
             $keys[] = $key;
         }
 
