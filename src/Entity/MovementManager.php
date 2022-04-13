@@ -64,7 +64,10 @@ class MovementManager extends GenericManager
 
         foreach($lines as $raw_line) {
             $line = str_getcsv($raw_line, $this->separator);
-            $final_line = array_combine($final_keys, $line);
+            $final_line = [];
+            foreach ($line as $key => $value) {
+                $final_line[$final_keys[$key] ?? $key] = $value;
+            }
             $translated_data = $this->translateMovementDataToCommon($final_line);
             $ac = new AC($translated_data);
             $movement = $this->factoryORM($ac, 'Entity\Banking\Movement\Movement');
