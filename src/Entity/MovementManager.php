@@ -57,7 +57,7 @@ class MovementManager extends GenericManager
     public function fillReport(EntityInterface $report, OutputInterface $output = null): EntityInterface
     {
         $lines = $this->fetchCsvFileLines($report, self::SETTLEMENT_REPORT_ENDPOINT, $output);
-        $keys = $this->resolveKeysFromHeader(array_shift($lines));
+        $keys = $this->resolveKeysFromHeader(array_shift($lines), false);
         $final_keys = $this->replaceKeysFromHeader($keys, [
             'source_id' => 'id',
             'payment_method_type' => 'financial_entity',
@@ -66,6 +66,7 @@ class MovementManager extends GenericManager
             'settlement_currency' => 'currency_id',
             'transaction_date' => 'date_created',
             'settlement_date' => 'date_released',
+            'external_reference' => 'reference_id',
         ]);
 
         foreach($lines as $raw_line) {
