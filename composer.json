@@ -16,7 +16,7 @@
         "gpupo/common-sdk": "^6.4 || dev-main"
     },
     "require-dev": {
-        "gpupo/common-dev": "dev-main"
+        "gpupo/common-dev": "^5.3 || dev-main"
     },
     "autoload": {
         "psr-4": {

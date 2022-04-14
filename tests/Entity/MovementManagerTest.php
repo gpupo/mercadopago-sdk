@@ -10,11 +10,14 @@ declare(strict_types=1);
 
 namespace  Gpupo\MercadopagoSdk\Tests\Entity;
 
+use Doctrine\Common\Collections\Collection as DCollection;
 use Gpupo\Common\Entity\ArrayCollection;
 use Gpupo\Common\Entity\Collection;
 use Gpupo\CommonSchema\ORM\Entity\Banking\Movement\Movement;
+use Gpupo\CommonSchema\ORM\Entity\Banking\Movement\Report;
 use Gpupo\CommonSchema\ORM\Entity\Trading\Order\Shipping\Payment\Payment;
 use Gpupo\MercadopagoSdk\Tests\TestCaseAbstract;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -49,18 +52,31 @@ class MovementManagerTest extends TestCaseAbstract
         $this->assertInstanceOf(ArrayCollection::class, $arrayCollection);
     }
 
-    public function testFindPaymentById()
+    public function testGetReportList()
     {
-        $manager = $this->mockupManager('mockup/Movement/payment.yaml');
-        $payment = $manager->findPaymentById(775046323112);
-        $raw = $payment->getExpands();
-        $this->assertInstanceOf(Payment::class, $payment);
-        $this->assertSame(775046323112, $payment->getPaymentNumber(), 'Payment Number');
-        $this->assertSame($raw['transaction_details']['net_received_amount'], $payment->getTransactionNetAmount(), 'Detail net');
-        $this->assertSame($raw['transaction_details']['total_paid_amount'], $payment->getTotalPaidAmount(), 'Detail paid');
-        $this->assertSame('BRL', $payment->getCurrencyId(), 'currency');
-        $this->assertSame(0.0, $payment->getOverpaidAmount());
-        // file_put_contents('var/cache/payment.yaml', Yaml::dump($payment->toArray(), 4, 4));
+        $manager = $this->mockupManager('mockup/Movement/reports.yaml');
+        $list = $manager->getReportList();
+        $this->assertInstanceOf(ArrayCollection::class, $list);
+        $this->assertContainsOnlyInstancesOf(Report::class, $list);
+    }
+
+    public function testFillReport()
+    {
+        // $manager = $this->mockupCsvManager('mockup/Movement/report.csv');
+        $manager = $this->getFactory()->factoryManager('movement');
+        $fake_report = new Report();
+        $fake_report->setFileName('foo.csv');
+        $fake_report->setInstitution('mercadopago');
+
+        $file_system = new Filesystem();
+        $file_system->copy(static::getResourcesPath().'/mockup/Movement/report.csv', static::getVarPath().'/cache/foo.csv');
+
+        $updated_report = $manager->fillReport($fake_report);
+        $this->assertInstanceOf(Report::class, $updated_report);
+        $movements = $updated_report->getMovements();
+        $this->assertInstanceOf(DCollection::class, $movements);
+        $this->assertInstanceOf(Movement::class, $movements->first());
+        $this->assertSame($updated_report, $movements->first()->getReport());
     }
 
     protected function mockupManager($file)
@@ -68,6 +84,15 @@ class MovementManagerTest extends TestCaseAbstract
         $data = $this->getResourceYaml($file);
         $manager = $this->getFactory()->factoryManager('movement');
         $response = $this->factoryResponseFromArray($data);
+        $manager->setDryRun($response);
+
+        return $manager;
+    }
+
+    protected function mockupCsvManager($file)
+    {
+        $manager = $this->getFactory()->factoryManager('movement');
+        $response = $this->factoryResponseFromFixture($file);
         $manager->setDryRun($response);
 
         return $manager;

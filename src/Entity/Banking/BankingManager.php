@@ -16,52 +16,75 @@ use Gpupo\CommonSchema\ArrayCollection\Banking\Report\Report;
 use Gpupo\CommonSchema\ORM\Entity\EntityInterface;
 use Gpupo\CommonSdk\Exception\ManagerException;
 use Gpupo\MercadopagoSdk\Entity\GenericManager;
+use Gpupo\MercadopagoSdk\Traits\CsvFileProcessTrait;
+use Gpupo\MercadopagoSdk\Traits\ReportFactoryTrait;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class BankingManager extends GenericManager
 {
-    public function requestReport()
+    use CsvFileProcessTrait;
+    use ReportFactoryTrait;
+
+    const REPORT_ORM_CLASS = 'Entity\Banking\Report\Report';
+    const REPORT_ARRAY_COLLECTION_CLASS = Report::class;
+
+    public function requestReport(\DateTime $beginDate, \DateTime $customEndDate = null)
     {
-        return $this->getFromRoute(['POST', '/v1/account/bank_report'], null, [
-            'begin_date' => '2017-05-01T03:00:00Z',
-            'end_date' => '2017-07-11T02:59:59Z',
+        if (empty($customEndDate)) {
+            $customEndDate = clone $beginDate;
+            $customEndDate->modify('+1 month');
+        }
+
+        return $this->getFromRoute(['POST', '/v1/account/release_report'], null, [
+            'begin_date' => $beginDate->format('Y-m-d\Th:i:s\Z'),
+            'end_date' => $customEndDate->format('Y-m-d\Th:i:s\Z'),
         ]);
+    }
+
+    public function getReportConfig(): array
+    {
+        if ($config = $this->getFromRoute(['GET', '/v1/account/release_report/config'])) {
+            return $config;
+        }
+
+        return [];
+    }
+
+    public function enableReportIncludeWithdrawal(): array
+    {
+        if (empty($old_config = $this->getReportConfig())) {
+            return false;
+        }
+
+        if ($old_config['include_withdrawal_at_end'] ?? false) {
+            return true;
+        }
+
+        $changed_config = $old_config;
+        $changed_config['include_withdrawal_at_end'] = true;
+
+        return $this->updateReportConfig($changed_config);
+    }
+
+    protected function updateReportConfig(array $config): array
+    {
+        if (empty($result = $this->getFromRoute(['PUT', '/v1/account/release_report/config'], null, $config))) {
+            return [];
+        }
+
+        return $result;
     }
 
     public function getReportList(): ArrayCollection
     {
-        $list = $this->getFromRoute(['GET', '/v1/account/bank_report/list']);
-        $collection = new ArrayCollection();
-        foreach ($list as $array) {
-            $translated = $this->translateReportDataToCommon($array);
-            $report = new Report($translated);
-            $collection->add($this->factoryORM($report, 'Entity\Banking\Report\Report'));
-        }
+        $list = $this->getFromRoute(['GET', '/v1/account/release_report/list']);
 
-        return $collection;
+        return $this->factoryReportsFromList($list);
     }
 
     public function fillReport(EntityInterface $report, OutputInterface $output = null)
     {
-        $map = $this->factorySimpleMap(['GET', sprintf('/v1/account/bank_report/%s', $report->getFileName())]);
-        $destination = sprintf('var/cache/%s', $report->getFileName());
-
-        if ($output) {
-            $output->writeln(sprintf('Opening Report %s ...', $destination));
-        }
-
-        if (!file_exists($destination)) {
-            if ($output) {
-                $output->writeln(sprintf('Requesting remote Report %s ...', $destination));
-            }
-            $this->getClient()->downloadFile($map->getResource(), $destination);
-        }
-
-        $lines = file($destination, FILE_IGNORE_NEW_LINES);
-
-        if (empty($lines)) {
-            throw new ManagerException('Empty Report');
-        }
+        $lines = $this->fetchCsvFileLines($report, '/v1/account/release_report', $output);
 
         $keys = $this->resolveKeysFromHeader(array_shift($lines));
         $totalCollection = [];
@@ -69,7 +92,7 @@ class BankingManager extends GenericManager
         foreach ($lines as $value) {
             $line = [
             ];
-            foreach (str_getcsv($value) as $k => $v) {
+            foreach (str_getcsv($value, $this->separator) as $k => $v) {
                 $line[$keys[$k]] = $v;
             }
 
@@ -133,20 +156,6 @@ class BankingManager extends GenericManager
         return $this->decorateByConversionType($report);
     }
 
-    protected function translateReportDataToCommon(array $array): array
-    {
-        $translated = array_merge([
-            'institution' => 'mercadopago',
-            'generated_date' => $array['date_created'],
-            'external_id' => $array['id'],
-            'description' => $array['created_from'],
-            'tags' => current(explode('_', $array['created_from'])),
-            'expands' => $array,
-        ], $array);
-
-        return $translated;
-    }
-
     protected function translateRecordDataToCommon(array $array, EntityInterface $report): array
     {
         $translated = array_merge([
@@ -155,23 +164,5 @@ class BankingManager extends GenericManager
         ], $array);
 
         return $translated;
-    }
-
-    protected function resolveKeysFromHeader($array)
-    {
-        $keys = [];
-
-        foreach (str_getcsv($array) as $value) {
-            $key = str_replace([
-                'mp_',
-                'reference',
-            ], [
-                '',
-                'id',
-            ], mb_strtolower($value));
-            $keys[] = $key;
-        }
-
-        return $keys;
     }
 }
