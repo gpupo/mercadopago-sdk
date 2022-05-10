@@ -69,7 +69,7 @@ trait ReportFactoryTrait
     protected function updateReportConfig(array $config): array
     {
         $this->assertConfigReportEndpointConstExists();
-        if (empty($result = $this->getFromRoute(['PUT', static::REPORT_URL_CONFIG_ENDPOINT], null, $config))) {
+        if (empty($result = $this->getFromRoute(['PUT', static::REPORT_URL_CONFIG_ENDPOINT], null, json_encode($config)))) {
             return [];
         }
 
@@ -118,7 +118,9 @@ trait ReportFactoryTrait
         $success = true;
         if (isset($old_config['frequency']) && $old_config['frequency'] && $frequency !== $old_config['frequency']['type']) {
             $new_config = $old_config;
+            $new_config['frequency'] = [];
             $new_config['frequency']['type'] = $frenquency;
+            $new_config['frequency']['hour'] = 23;
 
             $success = !empty($this->updateReportConfig($new_config));
         }
