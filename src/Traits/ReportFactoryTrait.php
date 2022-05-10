@@ -60,7 +60,7 @@ trait ReportFactoryTrait
     {
         $this->assertConfigReportEndpointConstExists();
         if ($config = $this->getFromRoute(['GET', static::REPORT_URL_CONFIG_ENDPOINT])) {
-            return $config;
+            return $config->toArray();
         }
 
         return [];
@@ -73,7 +73,7 @@ trait ReportFactoryTrait
             return [];
         }
 
-        return $result;
+        return $result->toArray();
     }
 
     private function assertConfigReportEndpointConstExists(): void
@@ -132,7 +132,7 @@ trait ReportFactoryTrait
 
         $result = $this->getFromRoute(['POST', static::REPORT_ENABLE_SCHEDULED_ENDPOINT]);
 
-        return $success && !empty($result);
+        return $success && !empty($result->toArray());
     }
 }
 
