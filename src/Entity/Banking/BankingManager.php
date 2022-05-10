@@ -138,4 +138,20 @@ class BankingManager extends GenericManager
 
         return $translated;
     }
+
+    public function enableReportIncludeWithdrawal(): bool
+    {
+        if (empty($old_config = $this->getReportConfig())) {
+            return [];
+        }
+
+        if ($old_config['include_withdrawal_at_end'] ?? false) {
+            return $old_config;
+        }
+
+        $changed_config = $old_config;
+        $changed_config['include_withdrawal_at_end'] = true;
+
+        return $this->updateReportConfig($changed_config);
+    }
 }

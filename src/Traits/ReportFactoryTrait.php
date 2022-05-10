@@ -83,22 +83,6 @@ trait ReportFactoryTrait
         }
     }
 
-    public function enableReportIncludeWithdrawal(): array
-    {
-        if (empty($old_config = $this->getReportConfig())) {
-            return false;
-        }
-
-        if ($old_config['include_withdrawal_at_end'] ?? false) {
-            return true;
-        }
-
-        $changed_config = $old_config;
-        $changed_config['include_withdrawal_at_end'] = true;
-
-        return $this->updateReportConfig($changed_config);
-    }
-
     public function enableScheduleReport(string $frenquency = 'daily'): bool
     {
         if(!in_array($frenquency, ['daily', 'weekly', 'monthly'])) {
