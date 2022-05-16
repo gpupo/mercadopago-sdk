@@ -83,19 +83,20 @@ trait ReportFactoryTrait
         }
     }
 
-    public function enableScheduleReport(string $frenquency = 'daily'): bool
+    public function enableScheduleReport(string $frequency = 'daily'): bool
     {
-        if(!in_array($frenquency, ['daily', 'weekly', 'monthly'])) {
-            throw new \LogicException('Frequency value should be "daily", "weekly" and "monthly"; receive: "'
-                . $frenquency 
-                . '"', 503);
+        if(!in_array($frequency, ['daily', 'weekly', 'monthly'])) {
+            throw new \LogicException('Frequency value should be "daily", "weekly" and "monthly"; receive: "' . $frequency . '"', 503);
         }
 
         if (empty($old_config = $this->getReportConfig())) {
             return false;
         }
 
-        if ($old_config['scheduled'] ?? false) {
+        if (($old_config['scheduled'] ?? false) 
+            && isset($old_config['frequency']['type']) 
+            && $old_config['frequency']['type'] === $frequency
+        ) {
             return true;
         }
 
@@ -103,7 +104,7 @@ trait ReportFactoryTrait
         if (isset($old_config['frequency']) && $old_config['frequency'] && $frequency !== $old_config['frequency']['type']) {
             $new_config = $old_config;
             $new_config['frequency'] = [];
-            $new_config['frequency']['type'] = $frenquency;
+            $new_config['frequency']['type'] = $frequency;
             $new_config['frequency']['hour'] = 23;
 
             $success = !empty($this->updateReportConfig($new_config));
