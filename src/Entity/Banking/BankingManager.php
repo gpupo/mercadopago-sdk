@@ -38,19 +38,6 @@ class BankingManager extends GenericManager
     const REPORT_URL_CONFIG_ENDPOINT = '/v1/account/release_report/config';
     const REPORT_ENABLE_SCHEDULED_ENDPOINT = '/v1/account/release_report/schedule';
 
-    public function requestReport(\DateTime $beginDate, \DateTime $customEndDate = null)
-    {
-        if (empty($customEndDate)) {
-            $customEndDate = clone $beginDate;
-            $customEndDate->modify('+1 month');
-        }
-
-        return $this->getFromRoute(['POST', '/v1/account/release_report'], null, [
-            'begin_date' => $beginDate->format('Y-m-d\Th:i:s\Z'),
-            'end_date' => $customEndDate->format('Y-m-d\Th:i:s\Z'),
-        ]);
-    }
-
     public function getReportList(): ArrayCollection
     {
         $list = $this->getFromRoute(['GET', '/v1/account/release_report/list']);

@@ -121,5 +121,43 @@ trait ReportFactoryTrait
 
         return $success && !empty($result->toArray());
     }
+
+    public function requestReport(\DateTimeImmutable $beginDate, string $interval = 'daily')
+    {
+        if (!defined('static::REPORT_CREATE_MANUAL_ENDPOINT')) {
+            throw new \LogicException(
+                'There\'s no constant "REPORT_CREATE_MANUAL_ENDPOINT" defined in "'
+                    . get_class($this) 
+                    . '"');
+        }
+
+        $date_interval = $this->factoryReportDateInterval($interval);
+        $end_date = $beginDate->sub($date_interval);
+
+        $begin_date_str = $beginDate->format('Y-m-d\T00:00:00\Z');
+        $end_date_str = $end_date->format('Y-m-d\T00:00:00\Z');
+
+        return $this->getFromRoute(['POST', static::REPORT_CREATE_MANUAL_ENDPOINT], null, [
+            'begin_date' => $begin_date_str,
+            'end_date' => $end_date_str,
+        ]);
+    }
+
+    protected function factoryReportDateInterval(string $interval): \DateInterval
+    {
+        if ('monthly' === $interval) {
+            return new \DateInterval('P1M');
+        }
+
+        if ('weekly' === $interval) {
+            return new \DateInterval('P7D');
+        }
+
+        if ('daily' === $interval) {
+            return new \DateInterval('P1D');
+        }
+
+        throw new \LogicException('Interval "' . $interval . '" is invalid! Use "monthly", "weekly" and "daily"');
+    }
 }
 
