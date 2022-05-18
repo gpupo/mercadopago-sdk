@@ -38,6 +38,7 @@ class MovementManager extends GenericManager
     const REPORT_ENABLE_SCHEDULED_ENDPOINT = '/v1/account/settlement_report/schedule';
     const SEARCH_FUNCTION_ENDPOINT = '/mercadopago_account/movements/search?';
     const SETTLEMENT_REPORT_ENDPOINT = '/v1/account/settlement_report';
+    const REPORT_CREATE_MANUAL_ENDPOINT = '/v1/account/settlement_report';
 
     public function searchByType($type)
     {

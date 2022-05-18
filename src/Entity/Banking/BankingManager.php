@@ -37,6 +37,7 @@ class BankingManager extends GenericManager
 
     const REPORT_URL_CONFIG_ENDPOINT = '/v1/account/release_report/config';
     const REPORT_ENABLE_SCHEDULED_ENDPOINT = '/v1/account/release_report/schedule';
+    const REPORT_CREATE_MANUAL_ENDPOINT = '/v1/account/release_report';
 
     public function getReportList(): ArrayCollection
     {
