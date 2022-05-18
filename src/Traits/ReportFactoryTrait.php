@@ -122,7 +122,7 @@ trait ReportFactoryTrait
         return $success && !empty($result->toArray());
     }
 
-    public function requestReport(\DateTimeImmutable $beginDate, string $interval = 'daily')
+    public function requestReport(\DateTimeImmutable $endDate, string $interval = 'daily')
     {
         if (!defined('static::REPORT_CREATE_MANUAL_ENDPOINT')) {
             throw new \LogicException(
@@ -132,15 +132,15 @@ trait ReportFactoryTrait
         }
 
         $date_interval = $this->factoryReportDateInterval($interval);
-        $end_date = $beginDate->sub($date_interval);
+        $begin_date = $endDate->sub($date_interval);
 
-        $begin_date_str = $beginDate->format('Y-m-d\T00:00:00\Z');
-        $end_date_str = $end_date->format('Y-m-d\T00:00:00\Z');
+        $begin_date_str = $begin_date->format('Y-m-d\T00:00:00\Z');
+        $end_date_str = $endDate->format('Y-m-d\T00:00:00\Z');
 
-        return $this->getFromRoute(['POST', static::REPORT_CREATE_MANUAL_ENDPOINT], null, [
+        return $this->getFromRoute(['POST', static::REPORT_CREATE_MANUAL_ENDPOINT], null, json_encode([
             'begin_date' => $begin_date_str,
             'end_date' => $end_date_str,
-        ]);
+        ]));
     }
 
     protected function factoryReportDateInterval(string $interval): \DateInterval
