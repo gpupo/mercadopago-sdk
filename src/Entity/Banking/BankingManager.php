@@ -35,52 +35,9 @@ class BankingManager extends GenericManager
     const REPORT_ORM_CLASS = 'Entity\Banking\Report\Report';
     const REPORT_ARRAY_COLLECTION_CLASS = Report::class;
 
-    public function requestReport(\DateTime $beginDate, \DateTime $customEndDate = null)
-    {
-        if (empty($customEndDate)) {
-            $customEndDate = clone $beginDate;
-            $customEndDate->modify('+1 month');
-        }
-
-        return $this->getFromRoute(['POST', '/v1/account/release_report'], null, [
-            'begin_date' => $beginDate->format('Y-m-d\Th:i:s\Z'),
-            'end_date' => $customEndDate->format('Y-m-d\Th:i:s\Z'),
-        ]);
-    }
-
-    public function getReportConfig(): array
-    {
-        if ($config = $this->getFromRoute(['GET', '/v1/account/release_report/config'])) {
-            return $config;
-        }
-
-        return [];
-    }
-
-    public function enableReportIncludeWithdrawal(): array
-    {
-        if (empty($old_config = $this->getReportConfig())) {
-            return false;
-        }
-
-        if ($old_config['include_withdrawal_at_end'] ?? false) {
-            return true;
-        }
-
-        $changed_config = $old_config;
-        $changed_config['include_withdrawal_at_end'] = true;
-
-        return $this->updateReportConfig($changed_config);
-    }
-
-    protected function updateReportConfig(array $config): array
-    {
-        if (empty($result = $this->getFromRoute(['PUT', '/v1/account/release_report/config'], null, $config))) {
-            return [];
-        }
-
-        return $result;
-    }
+    const REPORT_URL_CONFIG_ENDPOINT = '/v1/account/release_report/config';
+    const REPORT_ENABLE_SCHEDULED_ENDPOINT = '/v1/account/release_report/schedule';
+    const REPORT_CREATE_MANUAL_ENDPOINT = '/v1/account/release_report';
 
     public function getReportList(): ArrayCollection
     {
@@ -168,5 +125,21 @@ class BankingManager extends GenericManager
         ], $array);
 
         return $translated;
+    }
+
+    public function enableReportIncludeWithdrawal(): bool
+    {
+        if (empty($old_config = $this->getReportConfig())) {
+            return [];
+        }
+
+        if ($old_config['include_withdrawal_at_end'] ?? false) {
+            return $old_config;
+        }
+
+        $changed_config = $old_config;
+        $changed_config['include_withdrawal_at_end'] = true;
+
+        return $this->updateReportConfig($changed_config);
     }
 }
