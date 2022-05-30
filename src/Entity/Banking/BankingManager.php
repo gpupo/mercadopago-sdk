@@ -57,7 +57,7 @@ class BankingManager extends GenericManager
             $line = [
             ];
             foreach (str_getcsv($value, $this->separator) as $k => $v) {
-                $line[$keys[$k]] = $v;
+                $line[$keys[$k] ?? $k] = $v;
             }
 
             $errors = [];
@@ -111,7 +111,7 @@ class BankingManager extends GenericManager
             }
         }
 
-        $totalCollection['total_net'] = $totalCollection['total']['net_credit_amount'] - $totalCollection['subtotal_unblock']['net_credit_amount'] - $totalCollection['withdrawal_fee'];
+        $totalCollection['total_net'] = $totalCollection['total']['net_credit_amount'] - $totalCollection['subtotal_unblock']['net_credit_amount'] - ($totalCollection['withdrawal_fee'] ?? 0);
         $report->addExpand('totalisations', $totalCollection);
 
         return $this->decorateByConversionType($report);
