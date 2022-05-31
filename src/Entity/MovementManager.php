@@ -62,14 +62,15 @@ class MovementManager extends GenericManager
         $lines = $this->fetchCsvFileLines($report, self::SETTLEMENT_REPORT_ENDPOINT, $output);
         $keys = $this->resolveKeysFromHeader(array_shift($lines), false);
         $final_keys = $this->replaceKeysFromHeader($keys, [
-            'source_id' => 'id',
+            'source_id' => 'reference_id',
             'payment_method_type' => 'financial_entity',
             'transaction_type' => 'type',
             'settlement_net_amount' => 'amount',
             'settlement_currency' => 'currency_id',
             'transaction_date' => 'date_created',
             'settlement_date' => 'date_released',
-            'external_reference' => 'reference_id',
+            'external_reference' => 'id',
+            'record_type' => 'status',
         ]);
 
         foreach($lines as $raw_line) {
